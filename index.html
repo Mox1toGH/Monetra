@@ -1,44 +1,159 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="uk" data-theme="light">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="color-scheme" content="light dark">
     <title>Monetra</title>
+    <script>
+        // Apply saved theme / language before first paint (no flash)
+        (function () {
+            try {
+                var theme = localStorage.getItem("monetra-theme");
+                if (!theme) {
+                    theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+                }
+                document.documentElement.dataset.theme = theme;
+
+                var lang = localStorage.getItem("monetra-lang");
+                if (!lang) {
+                    lang = (navigator.language || "").toLowerCase().indexOf("uk") === 0 ? "uk" : "en";
+                }
+                document.documentElement.lang = lang;
+            } catch (e) {}
+        })();
+    </script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <header>
-        <h1>Monetra</h1>
-        <span id="user-info">Not logged in</span>
-        <button id="logout-btn" hidden>Logout</button>
+    <!-- ICON SPRITE -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+        <symbol id="i-dashboard" viewBox="0 0 24 24">
+            <rect width="7" height="9" x="3" y="3" rx="1"/>
+            <rect width="7" height="5" x="14" y="3" rx="1"/>
+            <rect width="7" height="9" x="14" y="12" rx="1"/>
+            <rect width="7" height="5" x="3" y="16" rx="1"/>
+        </symbol>
+        <symbol id="i-user" viewBox="0 0 24 24">
+            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+        </symbol>
+        <symbol id="i-plus" viewBox="0 0 24 24">
+            <path d="M5 12h14"/><path d="M12 5v14"/>
+        </symbol>
+        <symbol id="i-tag" viewBox="0 0 24 24">
+            <path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/>
+            <circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/>
+        </symbol>
+        <symbol id="i-trash" viewBox="0 0 24 24">
+            <path d="M3 6h18"/>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+            <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+            <line x1="10" x2="10" y1="11" y2="17"/>
+            <line x1="14" x2="14" y1="11" y2="17"/>
+        </symbol>
+        <symbol id="i-logout" viewBox="0 0 24 24">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" x2="9" y1="12" y2="12"/>
+        </symbol>
+        <symbol id="i-sun" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="4"/>
+            <path d="M12 2v2"/><path d="M12 20v2"/>
+            <path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/>
+            <path d="M2 12h2"/><path d="M20 12h2"/>
+            <path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
+        </symbol>
+        <symbol id="i-moon" viewBox="0 0 24 24">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+        </symbol>
+        <symbol id="i-x" viewBox="0 0 24 24">
+            <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+        </symbol>
+        <symbol id="i-left" viewBox="0 0 24 24">
+            <path d="m15 18-6-6 6-6"/>
+        </symbol>
+        <symbol id="i-right" viewBox="0 0 24 24">
+            <path d="m9 18 6-6-6-6"/>
+        </symbol>
+    </svg>
+
+    <!-- TOP BAR / NAVIGATION -->
+    <header class="topbar">
+        <a class="brand" href="#/overview">
+            <span class="mark"></span>Monetra
+        </a>
+
+        <nav id="main-nav" class="nav" aria-label="Main" hidden>
+            <button type="button" class="nav-item" data-page="overview">
+                <svg class="icon" aria-hidden="true"><use href="#i-dashboard"/></svg>
+                <span data-i18n="navOverview">Overview</span>
+            </button>
+            <button type="button" class="nav-item" data-page="account">
+                <svg class="icon" aria-hidden="true"><use href="#i-user"/></svg>
+                <span data-i18n="navAccount">Account</span>
+            </button>
+        </nav>
+
+        <div class="tools">
+            <div class="seg" role="group" data-i18n-aria="language" aria-label="Language">
+                <button type="button" data-set-lang="uk" aria-pressed="false">UA</button>
+                <button type="button" data-set-lang="en" aria-pressed="false">EN</button>
+            </div>
+            <button type="button" class="icon-btn" data-theme-toggle data-i18n-aria="themeToggle" aria-label="Switch theme">
+                <svg class="icon i-sun" aria-hidden="true"><use href="#i-sun"/></svg>
+                <svg class="icon i-moon" aria-hidden="true"><use href="#i-moon"/></svg>
+            </button>
+        </div>
     </header>
 
     <main>
 
         <!-- AUTHENTICATION -->
-        <section id="auth-section">
-            <h2>Account</h2>
+        <section id="auth-section" class="auth">
+            <div class="auth-card">
+                <div class="tabs" role="tablist">
+                    <button type="button" role="tab" class="tab" data-auth-tab="login" aria-selected="true" data-i18n="signIn">Sign in</button>
+                    <button type="button" role="tab" class="tab" data-auth-tab="register" aria-selected="false" data-i18n="createAccount">Create account</button>
+                </div>
 
-            <div class="auth-forms">
-                <div class="card">
-                    <h3>Register</h3>
+                <div id="login-panel" class="auth-body" role="tabpanel">
+                    <h1 data-i18n="signInTitle">Welcome back</h1>
+                    <p class="sub" data-i18n="signInSub">Sign in to continue to Monetra.</p>
 
-                    <form id="register-form">
-                        <input name="username" placeholder="Username" required minlength="3">
-                        <input name="email" type="email" placeholder="Email" required>
-                        <input name="password" type="password" placeholder="Password (min. 12 characters)" required minlength="12">
-                        <button type="submit">Register</button>
+                    <form id="login-form">
+                        <label class="field">
+                            <span data-i18n="loginLabel">Username or email</span>
+                            <input name="login" required autocomplete="username">
+                        </label>
+                        <label class="field">
+                            <span data-i18n="password">Password</span>
+                            <input name="password" type="password" required autocomplete="current-password">
+                        </label>
+                        <button type="submit" class="btn block" data-i18n="signIn">Sign in</button>
                     </form>
                 </div>
 
-                <div class="card">
-                    <h3>Login</h3>
+                <div id="register-panel" class="auth-body" role="tabpanel" hidden>
+                    <h1 data-i18n="registerTitle">Create your account</h1>
+                    <p class="sub" data-i18n="registerSub">Start tracking your expenses in a few seconds.</p>
 
-                    <form id="login-form">
-                        <input name="login" placeholder="Username or email" required>
-                        <input name="password" type="password" placeholder="Password" required>
-                        <button type="submit">Login</button>
+                    <form id="register-form">
+                        <label class="field">
+                            <span data-i18n="username">Username</span>
+                            <input name="username" required minlength="3" autocomplete="username">
+                        </label>
+                        <label class="field">
+                            <span data-i18n="email">Email</span>
+                            <input name="email" type="email" required autocomplete="email">
+                        </label>
+                        <label class="field">
+                            <span data-i18n="password">Password</span>
+                            <input name="password" type="password" required minlength="12" autocomplete="new-password">
+                            <small class="hint" data-i18n="passwordHint">At least 12 characters</small>
+                        </label>
+                        <button type="submit" class="btn block" data-i18n="createAccount">Create account</button>
                     </form>
                 </div>
             </div>
@@ -47,131 +162,257 @@
         <!-- APPLICATION -->
         <section id="app-section" hidden>
 
-            <h2>Dashboard</h2>
+            <!-- PAGE 1: OVERVIEW -->
+            <div id="page-overview" class="page">
 
-            <!-- STATISTICS -->
-            <div class="card">
-                <h3>Statistics</h3>
-
-                <div class="controls">
-                    <select id="period">
-                        <option value="day">Today</option>
-                        <option value="week">This week</option>
-                        <option value="month" selected>This month</option>
-                        <option value="year">This year</option>
-                        <option value="custom">Custom period</option>
-                    </select>
-                </div>
-
-                <div id="custom-dates" hidden>
-                    <input type="date" id="start-date">
-                    <input type="date" id="end-date">
-                    <button id="apply-dates">Apply</button>
-                </div>
-
-                <div class="stats">
-                    <div>
-                        <small>Total expenses</small>
-                        <h2 id="total-expenses">0 UAH</h2>
-                    </div>
-
-                    <div>
-                        <small>Transactions</small>
-                        <h2 id="transaction-count">0</h2>
-                    </div>
-
-                    <div>
-                        <small>Average expense</small>
-                        <h2 id="average-expense">0 UAH</h2>
+                <div class="page-head">
+                    <h1 data-i18n="overviewTitle">Overview</h1>
+                    <div class="actions">
+                        <button type="button" class="btn secondary" data-open="category-dialog">
+                            <svg class="icon" aria-hidden="true"><use href="#i-tag"/></svg>
+                            <span data-i18n="addCategory">Add category</span>
+                        </button>
+                        <button type="button" class="btn" data-open="expense-dialog">
+                            <svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg>
+                            <span data-i18n="addExpense">Add expense</span>
+                        </button>
                     </div>
                 </div>
 
-                <h3>Categories</h3>
-                <div id="category-stats"></div>
-            </div>
+                <!-- SUMMARY -->
+                <div class="card">
+                    <div class="card-head">
+                        <h2 data-i18n="summary">Summary</h2>
+                        <select id="period" class="select-auto" data-i18n-aria="period" aria-label="Period">
+                            <option value="day" data-i18n="periodDay">Today</option>
+                            <option value="week" data-i18n="periodWeek">This week</option>
+                            <option value="month" data-i18n="periodMonth" selected>This month</option>
+                            <option value="year" data-i18n="periodYear">This year</option>
+                            <option value="custom" data-i18n="periodCustom">Custom period</option>
+                        </select>
+                    </div>
 
-            <!-- ADD EXPENSE -->
-            <div class="card">
-                <h3>Add expense</h3>
+                    <div id="custom-dates" class="date-range" hidden>
+                        <label class="field">
+                            <span data-i18n="from">From</span>
+                            <input type="date" id="start-date">
+                        </label>
+                        <label class="field">
+                            <span data-i18n="to">To</span>
+                            <input type="date" id="end-date">
+                        </label>
+                        <button type="button" id="apply-dates" class="btn secondary" data-i18n="apply">Apply</button>
+                    </div>
 
-                <form id="expense-form">
-                    <input
-                        type="number"
-                        name="amount"
-                        placeholder="Amount in UAH (e.g. 150.50)"
-                        min="0.01"
-                        step="0.01"
-                        required
-                    >
-
-                    <select name="category_id" id="expense-category">
-                        <option value="">Other</option>
-                    </select>
-
-                    <input
-                        name="description"
-                        placeholder="Description"
-                        maxlength="500"
-                    >
-
-                    <input
-                        type="date"
-                        name="expense_date"
-                        id="expense-date"
-                        required
-                    >
-
-                    <button type="submit">Add expense</button>
-                </form>
-            </div>
-
-            <!-- CATEGORIES -->
-            <div class="card">
-                <h3>My categories</h3>
-
-                <form id="category-form">
-                    <input
-                        name="name"
-                        placeholder="New category name"
-                        maxlength="40"
-                        required
-                    >
-                    <button type="submit">Create category</button>
-                </form>
-
-                <div id="categories-list"></div>
-            </div>
-
-            <!-- EXPENSES -->
-            <div class="card">
-                <h3>Expenses history</h3>
-
-                <div class="controls">
-                    <input type="date" id="filter-start">
-                    <input type="date" id="filter-end">
-                    <button id="filter-expenses">Filter</button>
-                    <button id="clear-filter">Clear</button>
+                    <div class="stats">
+                        <div class="stat">
+                            <span class="label" data-i18n="totalExpenses">Total expenses</span>
+                            <p class="value" id="total-expenses">0 UAH</p>
+                        </div>
+                        <div class="stat">
+                            <span class="label" data-i18n="transactions">Transactions</span>
+                            <p class="value" id="transaction-count">0</p>
+                        </div>
+                        <div class="stat">
+                            <span class="label" data-i18n="averageExpense">Average expense</span>
+                            <p class="value" id="average-expense">0 UAH</p>
+                        </div>
+                    </div>
                 </div>
 
-                <div id="expenses-list"></div>
+                <!-- BREAKDOWN + CATEGORIES -->
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-head">
+                            <h2 data-i18n="byCategory">By category</h2>
+                        </div>
+                        <div id="category-stats"></div>
+                    </div>
 
-                <div class="pagination">
-                    <button id="prev-page">Previous</button>
-                    <span id="page-info">Page 1</span>
-                    <button id="next-page">Next</button>
+                    <div class="card">
+                        <div class="card-head">
+                            <h2 data-i18n="categories">Categories</h2>
+                        </div>
+                        <div id="categories-list"></div>
+                    </div>
+                </div>
+
+                <!-- HISTORY -->
+                <div class="card">
+                    <div class="card-head">
+                        <h2 data-i18n="history">Expenses history</h2>
+                    </div>
+
+                    <div class="controls">
+                        <label class="field">
+                            <span data-i18n="from">From</span>
+                            <input type="date" id="filter-start">
+                        </label>
+                        <label class="field">
+                            <span data-i18n="to">To</span>
+                            <input type="date" id="filter-end">
+                        </label>
+                        <button type="button" id="filter-expenses" class="btn" data-i18n="filter">Filter</button>
+                        <button type="button" id="clear-filter" class="btn secondary" data-i18n="clear">Clear</button>
+                    </div>
+
+                    <div id="expenses-list"></div>
+
+                    <div class="pagination">
+                        <button type="button" id="prev-page" class="btn secondary sm">
+                            <svg class="icon" aria-hidden="true"><use href="#i-left"/></svg>
+                            <span data-i18n="previous">Previous</span>
+                        </button>
+                        <span id="page-info">Page 1 / 1</span>
+                        <button type="button" id="next-page" class="btn secondary sm">
+                            <span data-i18n="next">Next</span>
+                            <svg class="icon" aria-hidden="true"><use href="#i-right"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE 2: ACCOUNT -->
+            <div id="page-account" class="page" hidden>
+
+                <div class="page-head">
+                    <h1 data-i18n="accountTitle">Account</h1>
+                </div>
+
+                <div class="card">
+                    <div class="card-head">
+                        <h2 data-i18n="profile">Profile</h2>
+                    </div>
+
+                    <div class="profile-head">
+                        <div class="avatar" id="account-avatar">?</div>
+                        <div>
+                            <p class="profile-name" id="account-name">—</p>
+                            <p class="muted" id="user-info">Not logged in</p>
+                        </div>
+                    </div>
+
+                    <dl class="kv">
+                        <div>
+                            <dt data-i18n="username">Username</dt>
+                            <dd id="account-username">—</dd>
+                        </div>
+                        <div>
+                            <dt data-i18n="email">Email</dt>
+                            <dd id="account-email">—</dd>
+                        </div>
+                        <div id="since-row" hidden>
+                            <dt data-i18n="memberSince">Member since</dt>
+                            <dd id="account-since">—</dd>
+                        </div>
+                    </dl>
+                </div>
+
+                <div class="card">
+                    <div class="card-head">
+                        <h2 data-i18n="preferences">Preferences</h2>
+                    </div>
+
+                    <div class="pref">
+                        <span data-i18n="theme">Theme</span>
+                        <div class="seg" role="group">
+                            <button type="button" data-set-theme="light" aria-pressed="false" data-i18n="themeLight">Light</button>
+                            <button type="button" data-set-theme="dark" aria-pressed="false" data-i18n="themeDark">Dark</button>
+                        </div>
+                    </div>
+                    <div class="pref">
+                        <span data-i18n="language">Language</span>
+                        <div class="seg" role="group">
+                            <button type="button" data-set-lang="uk" aria-pressed="false">Українська</button>
+                            <button type="button" data-set-lang="en" aria-pressed="false">English</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-head">
+                        <h2 data-i18n="session">Session</h2>
+                    </div>
+
+                    <div class="pref">
+                        <span class="muted" data-i18n="sessionText">You will need to sign in again to access your data.</span>
+                        <button type="button" id="logout-btn" class="btn secondary danger-outline" hidden>
+                            <svg class="icon" aria-hidden="true"><use href="#i-logout"/></svg>
+                            <span data-i18n="signOut">Sign out</span>
+                        </button>
+                    </div>
                 </div>
             </div>
 
         </section>
 
-        <div id="message" role="status"></div>
-
     </main>
 
-    <footer>
-        Monetra API Test Client
-    </footer>
+    <!-- DIALOG: ADD EXPENSE -->
+    <dialog id="expense-dialog" class="dialog" aria-labelledby="expense-dialog-title">
+        <div class="dialog-head">
+            <h2 id="expense-dialog-title" data-i18n="addExpense">Add expense</h2>
+            <button type="button" class="icon-btn" data-close data-i18n-aria="close" aria-label="Close">
+                <svg class="icon" aria-hidden="true"><use href="#i-x"/></svg>
+            </button>
+        </div>
 
-    <script src="app.js"></script>
+        <form id="expense-form">
+            <label class="field">
+                <span data-i18n="amountUah">Amount, UAH</span>
+                <input type="number" name="amount" placeholder="0.00" min="0.01" step="0.01" inputmode="decimal" required autofocus>
+            </label>
+
+            <label class="field">
+                <span data-i18n="category">Category</span>
+                <select name="category_id" id="expense-category">
+                    <option value="" data-i18n="other">Other</option>
+                </select>
+            </label>
+
+            <label class="field">
+                <span data-i18n="description">Description</span>
+                <input name="description" maxlength="500" data-i18n-placeholder="descPlaceholder" placeholder="e.g. Groceries">
+            </label>
+
+            <label class="field">
+                <span data-i18n="date">Date</span>
+                <input type="date" name="expense_date" id="expense-date" required>
+            </label>
+
+            <div class="form-actions">
+                <button type="button" class="btn secondary" data-close data-i18n="cancel">Cancel</button>
+                <button type="submit" class="btn" data-i18n="addExpense">Add expense</button>
+            </div>
+        </form>
+    </dialog>
+
+    <!-- DIALOG: ADD CATEGORY -->
+    <dialog id="category-dialog" class="dialog" aria-labelledby="category-dialog-title">
+        <div class="dialog-head">
+            <h2 id="category-dialog-title" data-i18n="addCategory">Add category</h2>
+            <button type="button" class="icon-btn" data-close data-i18n-aria="close" aria-label="Close">
+                <svg class="icon" aria-hidden="true"><use href="#i-x"/></svg>
+            </button>
+        </div>
+
+        <form id="category-form">
+            <label class="field">
+                <span data-i18n="name">Name</span>
+                <input name="name" maxlength="40" required autofocus data-i18n-placeholder="catPlaceholder" placeholder="e.g. Subscriptions">
+            </label>
+
+            <div class="form-actions">
+                <button type="button" class="btn secondary" data-close data-i18n="cancel">Cancel</button>
+                <button type="submit" class="btn" data-i18n="createCategory">Create category</button>
+            </div>
+        </form>
+    </dialog>
+
+    <!-- TOAST -->
+    <div id="message" role="status" popover="manual"></div>
+
+    <script src="ui.js"></script>
+    <script src="app_.js"></script>
 </body>
 </html>
