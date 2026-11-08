@@ -2,7 +2,7 @@
 // MONETRA FRONTEND
 // ==========================================
 
-const API_URL = "https://monetra-api.ai-email-it-turik-001.workers.dev";
+const API_URL = "";
 
 let currentPage = 1;
 let totalPages = 1;
