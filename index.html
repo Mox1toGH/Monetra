@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monetra</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>Monetra</h1>
+        <span id="user-info">Not logged in</span>
+        <button id="logout-btn" hidden>Logout</button>
+    </header>
+
+    <main>
+
+        <!-- AUTHENTICATION -->
+        <section id="auth-section">
+            <h2>Account</h2>
+
+            <div class="auth-forms">
+                <div class="card">
+                    <h3>Register</h3>
+
+                    <form id="register-form">
+                        <input name="username" placeholder="Username" required minlength="3">
+                        <input name="email" type="email" placeholder="Email" required>
+                        <input name="password" type="password" placeholder="Password (min. 12 characters)" required minlength="12">
+                        <button type="submit">Register</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3>Login</h3>
+
+                    <form id="login-form">
+                        <input name="login" placeholder="Username or email" required>
+                        <input name="password" type="password" placeholder="Password" required>
+                        <button type="submit">Login</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- APPLICATION -->
+        <section id="app-section" hidden>
+
+            <h2>Dashboard</h2>
+
+            <!-- STATISTICS -->
+            <div class="card">
+                <h3>Statistics</h3>
+
+                <div class="controls">
+                    <select id="period">
+                        <option value="day">Today</option>
+                        <option value="week">This week</option>
+                        <option value="month" selected>This month</option>
+                        <option value="year">This year</option>
+                        <option value="custom">Custom period</option>
+                    </select>
+                </div>
+
+                <div id="custom-dates" hidden>
+                    <input type="date" id="start-date">
+                    <input type="date" id="end-date">
+                    <button id="apply-dates">Apply</button>
+                </div>
+
+                <div class="stats">
+                    <div>
+                        <small>Total expenses</small>
+                        <h2 id="total-expenses">0 UAH</h2>
+                    </div>
+
+                    <div>
+                        <small>Transactions</small>
+                        <h2 id="transaction-count">0</h2>
+                    </div>
+
+                    <div>
+                        <small>Average expense</small>
+                        <h2 id="average-expense">0 UAH</h2>
+                    </div>
+                </div>
+
+                <h3>Categories</h3>
+                <div id="category-stats"></div>
+            </div>
+
+            <!-- ADD EXPENSE -->
+            <div class="card">
+                <h3>Add expense</h3>
+
+                <form id="expense-form">
+                    <input
+                        type="number"
+                        name="amount"
+                        placeholder="Amount in UAH (e.g. 150.50)"
+                        min="0.01"
+                        step="0.01"
+                        required
+                    >
+
+                    <select name="category_id" id="expense-category">
+                        <option value="">Other</option>
+                    </select>
+
+                    <input
+                        name="description"
+                        placeholder="Description"
+                        maxlength="500"
+                    >
+
+                    <input
+                        type="date"
+                        name="expense_date"
+                        id="expense-date"
+                        required
+                    >
+
+                    <button type="submit">Add expense</button>
+                </form>
+            </div>
+
+            <!-- CATEGORIES -->
+            <div class="card">
+                <h3>My categories</h3>
+
+                <form id="category-form">
+                    <input
+                        name="name"
+                        placeholder="New category name"
+                        maxlength="40"
+                        required
+                    >
+                    <button type="submit">Create category</button>
+                </form>
+
+                <div id="categories-list"></div>
+            </div>
+
+            <!-- EXPENSES -->
+            <div class="card">
+                <h3>Expenses history</h3>
+
+                <div class="controls">
+                    <input type="date" id="filter-start">
+                    <input type="date" id="filter-end">
+                    <button id="filter-expenses">Filter</button>
+                    <button id="clear-filter">Clear</button>
+                </div>
+
+                <div id="expenses-list"></div>
+
+                <div class="pagination">
+                    <button id="prev-page">Previous</button>
+                    <span id="page-info">Page 1</span>
+                    <button id="next-page">Next</button>
+                </div>
+            </div>
+
+        </section>
+
+        <div id="message" role="status"></div>
+
+    </main>
+
+    <footer>
+        Monetra API Test Client
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
