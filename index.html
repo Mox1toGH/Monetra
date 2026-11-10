@@ -77,6 +77,10 @@
         <symbol id="i-right" viewBox="0 0 24 24">
             <path d="m9 18 6-6-6-6"/>
         </symbol>
+        <symbol id="i-edit" viewBox="0 0 24 24">
+            <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+            <path d="m15 5 4 4"/>
+        </symbol>
     </svg>
 
     <!-- TOP BAR / NAVIGATION -->
@@ -357,10 +361,10 @@
             </button>
         </div>
 
-        <form id="expense-form">
+        <form id="create-expense-form">
             <label class="field">
                 <span data-i18n="amountUah">Amount, UAH</span>
-                <input type="number" name="amount" placeholder="0.00" min="0.01" step="0.01" inputmode="decimal" required autofocus>
+                <input type="number" id="expense-amount" name="amount" placeholder="0.00" min="0.01" step="0.01" inputmode="decimal" required autofocus>
             </label>
 
             <label class="field">
@@ -372,7 +376,7 @@
 
             <label class="field">
                 <span data-i18n="description">Description</span>
-                <input name="description" maxlength="500" data-i18n-placeholder="descPlaceholder" placeholder="e.g. Groceries">
+                <input id="expense-description" name="description" maxlength="500" data-i18n-placeholder="descPlaceholder" placeholder="e.g. Groceries">
             </label>
 
             <label class="field">
@@ -396,15 +400,79 @@
             </button>
         </div>
 
-        <form id="category-form">
+        <form id="create-category-form">
             <label class="field">
                 <span data-i18n="name">Name</span>
-                <input name="name" maxlength="40" required autofocus data-i18n-placeholder="catPlaceholder" placeholder="e.g. Subscriptions">
+                <input id="category-name-input" name="name" maxlength="40" required autofocus data-i18n-placeholder="catPlaceholder" placeholder="e.g. Subscriptions">
+            </label>
+
+            <label class="field">
+                <span data-i18n="color">Color</span>
+                <div class="color-picker-row">
+                    <input type="color" id="category-color-input" name="color" value="#64748B" class="color-input">
+                    <span class="color-value" id="category-color-val">#64748B</span>
+                </div>
+                <div class="color-swatches" data-target="category-color-input">
+                    <button type="button" class="color-swatch" style="--c:#EF4444" data-color="#EF4444" title="Red"></button>
+                    <button type="button" class="color-swatch" style="--c:#F97316" data-color="#F97316" title="Orange"></button>
+                    <button type="button" class="color-swatch" style="--c:#F59E0B" data-color="#F59E0B" title="Amber"></button>
+                    <button type="button" class="color-swatch" style="--c:#10B981" data-color="#10B981" title="Emerald"></button>
+                    <button type="button" class="color-swatch" style="--c:#06B6D4" data-color="#06B6D4" title="Cyan"></button>
+                    <button type="button" class="color-swatch" style="--c:#3B82F6" data-color="#3B82F6" title="Blue"></button>
+                    <button type="button" class="color-swatch" style="--c:#6366F1" data-color="#6366F1" title="Indigo"></button>
+                    <button type="button" class="color-swatch" style="--c:#8B5CF6" data-color="#8B5CF6" title="Purple"></button>
+                    <button type="button" class="color-swatch" style="--c:#EC4899" data-color="#EC4899" title="Pink"></button>
+                    <button type="button" class="color-swatch active" style="--c:#64748B" data-color="#64748B" title="Slate"></button>
+                </div>
             </label>
 
             <div class="form-actions">
                 <button type="button" class="btn secondary" data-close data-i18n="cancel">Cancel</button>
                 <button type="submit" class="btn" data-i18n="createCategory">Create category</button>
+            </div>
+        </form>
+    </dialog>
+
+    <!-- DIALOG: EDIT CATEGORY -->
+    <dialog id="edit-category-dialog" class="dialog" aria-labelledby="edit-category-dialog-title">
+        <div class="dialog-head">
+            <h2 id="edit-category-dialog-title" data-i18n="editCategory">Edit category</h2>
+            <button type="button" class="icon-btn" data-close data-i18n-aria="close" aria-label="Close">
+                <svg class="icon" aria-hidden="true"><use href="#i-x"/></svg>
+            </button>
+        </div>
+
+        <form id="edit-category-form">
+            <input type="hidden" id="edit-category-id" name="id">
+
+            <label class="field">
+                <span data-i18n="name">Name</span>
+                <input id="edit-category-name-input" name="name" maxlength="40" required autofocus data-i18n-placeholder="catPlaceholder" placeholder="e.g. Subscriptions">
+            </label>
+
+            <label class="field">
+                <span data-i18n="color">Color</span>
+                <div class="color-picker-row">
+                    <input type="color" id="edit-category-color-input" name="color" value="#64748B" class="color-input">
+                    <span class="color-value" id="edit-category-color-val">#64748B</span>
+                </div>
+                <div class="color-swatches" data-target="edit-category-color-input">
+                    <button type="button" class="color-swatch" style="--c:#EF4444" data-color="#EF4444" title="Red"></button>
+                    <button type="button" class="color-swatch" style="--c:#F97316" data-color="#F97316" title="Orange"></button>
+                    <button type="button" class="color-swatch" style="--c:#F59E0B" data-color="#F59E0B" title="Amber"></button>
+                    <button type="button" class="color-swatch" style="--c:#10B981" data-color="#10B981" title="Emerald"></button>
+                    <button type="button" class="color-swatch" style="--c:#06B6D4" data-color="#06B6D4" title="Cyan"></button>
+                    <button type="button" class="color-swatch" style="--c:#3B82F6" data-color="#3B82F6" title="Blue"></button>
+                    <button type="button" class="color-swatch" style="--c:#6366F1" data-color="#6366F1" title="Indigo"></button>
+                    <button type="button" class="color-swatch" style="--c:#8B5CF6" data-color="#8B5CF6" title="Purple"></button>
+                    <button type="button" class="color-swatch" style="--c:#EC4899" data-color="#EC4899" title="Pink"></button>
+                    <button type="button" class="color-swatch" style="--c:#64748B" data-color="#64748B" title="Slate"></button>
+                </div>
+            </label>
+
+            <div class="form-actions">
+                <button type="button" class="btn secondary" data-close data-i18n="cancel">Cancel</button>
+                <button type="submit" class="btn" data-i18n="saveCategory">Save changes</button>
             </div>
         </form>
     </dialog>

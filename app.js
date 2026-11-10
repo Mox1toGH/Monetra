@@ -7,11 +7,16 @@ const API_URL = "";
 let currentPage = 1;
 let totalPages = 1;
 
+let categoriesCache = [];
+
 const $ = (selector) => document.querySelector(selector);
+const $$ = (selector) => document.querySelectorAll(selector);
 
 const today = new Date().toLocaleDateString("en-CA");
 
-$("#expense-date").value = today;
+if ($("#expense-date")) {
+    $("#expense-date").value = today;
+}
 
 // ==========================================
 // API REQUESTS
@@ -44,6 +49,7 @@ async function api(path, options = {}) {
 
 function showMessage(message, type = "success") {
     const element = $("#message");
+    if (!element) return;
 
     element.textContent = message;
     element.className = type;
@@ -75,11 +81,13 @@ function createElement(tag, className, text) {
 // ==========================================
 
 function showApp(user) {
-    $("#auth-section").hidden = true;
-    $("#app-section").hidden = false;
-    $("#logout-btn").hidden = false;
+    if ($("#auth-section")) $("#auth-section").hidden = true;
+    if ($("#app-section")) $("#app-section").hidden = false;
+    if ($("#logout-btn")) $("#logout-btn").hidden = false;
 
-    $("#user-info").textContent = "Logged in as: " + user.username;
+    if ($("#user-info")) {
+        $("#user-info").textContent = "Logged in as: " + user.username;
+    }
 
     loadCategories();
     loadExpenses();
@@ -87,429 +95,437 @@ function showApp(user) {
 }
 
 function showAuth() {
-    $("#auth-section").hidden = false;
-    $("#app-section").hidden = true;
-    $("#logout-btn").hidden = true;
+    if ($("#auth-section")) $("#auth-section").hidden = false;
+    if ($("#app-section")) $("#app-section").hidden = true;
+    if ($("#logout-btn")) $("#logout-btn").hidden = true;
 
-    $("#user-info").textContent = "Not logged in";
+    if ($("#user-info")) {
+        $("#user-info").textContent = "Not logged in";
+    }
 }
 
-$("#register-form").addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-    const form = new FormData(event.target);
-
-    try {
-        const result = await api("/api/auth/register", {
-            method: "POST",
-            body: JSON.stringify({
-                username: form.get("username"),
-                email: form.get("email"),
-                password: form.get("password")
-            })
-        });
-
-        showApp(result.user);
-        showMessage("Account created successfully!");
-
-        event.target.reset();
-
-    } catch (error) {
-        showMessage(error.message, "error");
-    }
-});
-
-$("#login-form").addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-    const form = new FormData(event.target);
-
-    try {
-        const result = await api("/api/auth/login", {
-            method: "POST",
-            body: JSON.stringify({
-                login: form.get("login"),
-                password: form.get("password")
-            })
-        });
-
-        showApp(result.user);
-        showMessage("Login successful!");
-
-        event.target.reset();
-
-    } catch (error) {
-        showMessage(error.message, "error");
-    }
-});
-
-$("#logout-btn").addEventListener("click", async () => {
-    try {
-        await api("/api/auth/logout", {
-            method: "POST"
-        });
-
-        showAuth();
-        showMessage("Logged out");
-
-    } catch (error) {
-        showMessage(error.message, "error");
-    }
-});
-
 // ==========================================
-// CATEGORIES
+// CATEGORIES MANAGEMENT (з підтримкою кольорів)
 // ==========================================
 
 async function loadCategories() {
     try {
-        const result = await api("/api/categories");
-
-        const select = $("#expense-category");
-        const list = $("#categories-list");
-
-        select.replaceChildren();
-        list.replaceChildren();
-
-        result.categories.forEach(category => {
-            const option = document.createElement("option");
-
-            option.value = category.id;
-            option.textContent = category.name;
-
-            if (category.name.toLowerCase() === "other") {
-                option.selected = true;
-            }
-
-            select.appendChild(option);
-
-            const item = createElement("div", "category-item");
-
-            item.appendChild(
-                createElement("span", "", category.name)
-            );
-
-            if (category.name.toLowerCase() !== "other") {
-                const button = createElement("button", "", "Delete");
-
-                button.addEventListener("click", () => {
-                    deleteCategory(category.id);
-                });
-
-                item.appendChild(button);
-            }
-
-            list.appendChild(item);
-        });
-
-    } catch (error) {
-        showMessage(error.message, "error");
+        const data = await api("/api/categories");
+        categoriesCache = data.categories || [];
+        renderCategoriesList();
+        populateCategorySelects();
+    } catch (err) {
+        console.error("Failed to load categories:", err);
     }
 }
 
-$("#category-form").addEventListener("submit", async (event) => {
+function renderCategoriesList() {
+    const container = $("#categories-list");
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    categoriesCache.forEach(cat => {
+        const item = createElement("div", "category-item");
+        item.style.display = "flex";
+        item.style.alignItems = "center";
+        item.style.justifyContent = "space-between";
+        item.style.padding = "8px";
+        item.style.marginBottom = "6px";
+        item.style.border = "1px solid #e2e8f0";
+        item.style.borderRadius = "6px";
+
+        const left = createElement("div", "category-info");
+        left.style.display = "flex";
+        left.style.alignItems = "center";
+        left.style.gap = "10px";
+
+        const colorBadge = createElement("span", "category-color-badge");
+        colorBadge.style.width = "16px";
+        colorBadge.style.height = "16px";
+        colorBadge.style.borderRadius = "50%";
+        colorBadge.style.backgroundColor = cat.color;
+        colorBadge.style.display = "inline-block";
+
+        const nameSpan = createElement("span", "category-name", cat.name);
+        nameSpan.style.fontWeight = "500";
+
+        left.appendChild(colorBadge);
+        left.appendChild(nameSpan);
+        item.appendChild(left);
+
+        const actions = createElement("div", "category-actions");
+        actions.style.display = "flex";
+        actions.style.gap = "6px";
+
+        const editBtn = createElement("button", "btn-edit", "Редагувати");
+        editBtn.type = "button";
+        editBtn.onclick = () => openEditCategoryModal(cat);
+
+        actions.appendChild(editBtn);
+
+        if (cat.name.toLowerCase() !== "other") {
+            const deleteBtn = createElement("button", "btn-delete", "Видалити");
+            deleteBtn.type = "button";
+            deleteBtn.onclick = () => deleteCategory(cat.id);
+            actions.appendChild(deleteBtn);
+        }
+
+        item.appendChild(actions);
+        container.appendChild(item);
+    });
+}
+
+function populateCategorySelects() {
+    const selects = $$("select[name='category_id'], #expense-category, #filter-category");
+    
+    selects.forEach(select => {
+        if (!select) return;
+        const currentVal = select.value;
+        
+        // Зберігаємо першу опцію (якщо це фільтр "Всі категорії" тощо)
+        const firstOption = select.options[0] && select.options[0].value === "" ? select.options[0].outerHTML : '<option value="">Виберіть категорію</option>';
+        
+        select.innerHTML = firstOption;
+
+        categoriesCache.forEach(cat => {
+            const opt = document.createElement("option");
+            opt.value = cat.id;
+            opt.textContent = cat.name;
+            select.appendChild(opt);
+        });
+
+        select.value = currentVal;
+    });
+}
+
+async function handleCreateCategory(event) {
     event.preventDefault();
 
-    const form = new FormData(event.target);
+    const nameInput = $("#category-name-input");
+    const colorInput = $("#category-color-input");
+
+    if (!nameInput) return;
 
     try {
         await api("/api/categories", {
             method: "POST",
             body: JSON.stringify({
-                name: form.get("name")
+                name: nameInput.value.trim(),
+                color: colorInput ? colorInput.value : "#64748B"
             })
         });
 
-        event.target.reset();
+        nameInput.value = "";
+        if (colorInput) colorInput.value = "#64748B";
 
-        await loadCategories();
-
-        showMessage("Category created!");
-
-    } catch (error) {
-        showMessage(error.message, "error");
+        loadCategories();
+        showMessage("Категорію успішно створено!");
+    } catch (err) {
+        showMessage(err.message, "error");
     }
-});
+}
+
+async function openEditCategoryModal(cat) {
+    const newName = prompt("Введіть нову назву категорії:", cat.name);
+    if (newName === null) return;
+
+    const newColor = prompt("Введіть новий HEX колір (наприклад, #3498DB):", cat.color);
+    if (newColor === null) return;
+
+    try {
+        await api(`/api/categories/${cat.id}`, {
+            method: "PATCH",
+            body: JSON.stringify({
+                name: newName.trim(),
+                color: newColor.trim()
+            })
+        });
+
+        loadCategories();
+        loadExpenses();
+        loadStatistics();
+        showMessage("Категорію оновлено!");
+    }	catch (err) {
+        showMessage(err.message, "error");
+    }
+}
 
 async function deleteCategory(id) {
-    if (!confirm("Delete this category? Its expenses will move to Other.")) {
+    if (!confirm("Ви впевнені? Всі витрати з цієї категорії будуть перенесені в 'Other'.")) {
         return;
     }
 
     try {
-        await api("/api/categories/" + encodeURIComponent(id), {
+        await api(`/api/categories/${id}`, {
             method: "DELETE"
         });
 
-        await loadCategories();
-        await loadExpenses();
-        await loadStatistics();
-
-        showMessage("Category deleted");
-
-    } catch (error) {
-        showMessage(error.message, "error");
+        loadCategories();
+        loadExpenses();
+        loadStatistics();
+        showMessage("Категорію видалено.");
+    } catch (err) {
+        showMessage(err.message, "error");
     }
 }
 
 // ==========================================
-// EXPENSES
+// EXPENSES MANAGEMENT
 // ==========================================
 
-$("#expense-form").addEventListener("submit", async (event) => {
-    event.preventDefault();
+async function loadExpenses() {
+    try {
+        const data = await api(`/api/expenses?page=${currentPage}`);
+        renderExpensesList(data.expenses || []);
+        totalPages = data.pagination.pages || 1;
+        
+        const pageInfo = $("#page-info");
+        if (pageInfo) {
+            pageInfo.textContent = `Сторінка ${currentPage} з ${totalPages}`;
+        }
+    } catch (err) {
+        console.error("Failed to load expenses:", err);
+    }
+}
 
-    const form = new FormData(event.target);
+function renderExpensesList(expenses) {
+    const container = $("#expenses-list");
+    if (!container) return;
 
-    const amount = Number(form.get("amount"));
+    container.innerHTML = "";
 
-    if (!Number.isFinite(amount) || amount <= 0) {
-        showMessage("Invalid amount", "error");
+    if (expenses.length === 0) {
+        container.innerHTML = "<p>Витрат поки немає.</p>";
         return;
     }
+
+    expenses.forEach(exp => {
+        const item = createElement("div", "expense-item");
+        item.style.display = "flex";
+        item.style.justifyContent = "space-between";
+        item.style.alignItems = "center";
+        item.style.padding = "10px";
+        item.style.borderBottom = "1px solid #e2e8f0";
+
+        const left = createElement("div");
+        
+        const catBadge = createElement("span", "expense-category-badge", exp.category_name);
+        catBadge.style.backgroundColor = exp.category_color || "#64748B";
+        catBadge.style.color = "#fff";
+        catBadge.style.padding = "2px 8px";
+        catBadge.style.borderRadius = "12px";
+        catBadge.style.fontSize = "12px";
+        catBadge.style.marginRight = "8px";
+
+        const desc = createElement("span", "expense-desc", exp.description || "Без опису");
+        const dateSpan = createElement("span", "expense-date", ` (${exp.expense_date})`);
+        dateSpan.style.fontSize = "12px";
+        dateSpan.style.color = "#648299";
+
+        left.appendChild(catBadge);
+        left.appendChild(desc);
+        left.appendChild(dateSpan);
+        item.appendChild(left);
+
+        const right = createElement("div");
+        right.style.display = "flex";
+        right.style.alignItems = "center";
+        right.style.gap = "10px";
+
+        const amountSpan = createElement("span", "expense-amount", formatMoney(exp.amount));
+        amountSpan.style.fontWeight = "600";
+
+        const delBtn = createElement("button", "btn-delete-expense", "×");
+        delBtn.title = "Видалити витрату";
+        delBtn.onclick = () => deleteExpense(exp.id);
+
+        right.appendChild(amountSpan);
+        right.appendChild(delBtn);
+        item.appendChild(right);
+
+        container.appendChild(item);
+    });
+}
+
+async function handleCreateExpense(event) {
+    event.preventDefault();
+
+    const amountInput = $("#expense-amount");
+    const descInput = $("#expense-description");
+    const dateInput = $("#expense-date");
+    const catSelect = $("#expense-category");
+
+    if (!amountInput || !dateInput) return;
+
+    // Конвертуємо введену суму у гривнях у мінори (копійки)
+    const floatAmount = parseFloat(amountInput.value);
+    const amountInMinor = Math.round(floatAmount * 100);
 
     try {
         await api("/api/expenses", {
             method: "POST",
             body: JSON.stringify({
-                amount: Math.round(amount * 100),
-                category_id: form.get("category_id"),
-                description: form.get("description"),
-                expense_date: form.get("expense_date")
+                amount: amountInMinor,
+                description: descInput ? descInput.value.trim() : "",
+                expense_date: dateInput.value,
+                category_id: catSelect ? catSelect.value : undefined,
+                currency: "UAH"
             })
         });
 
-        event.target.reset();
-        $("#expense-date").value = today;
+        amountInput.value = "";
+        if (descInput) descInput.value = "";
+        dateInput.value = today;
 
-        currentPage = 1;
-
-        await loadExpenses();
-        await loadStatistics();
-
-        showMessage("Expense added!");
-
-    } catch (error) {
-        showMessage(error.message, "error");
-    }
-});
-
-async function loadExpenses() {
-    try {
-        const params = new URLSearchParams();
-
-        params.set("page", currentPage);
-        params.set("limit", 10);
-        params.set("sort", "date_desc");
-
-        const start = $("#filter-start").value;
-        const end = $("#filter-end").value;
-
-        if (start) params.set("start", start);
-        if (end) params.set("end", end);
-
-        const result = await api(
-            "/api/expenses?" + params.toString()
-        );
-
-        const list = $("#expenses-list");
-
-        list.replaceChildren();
-
-        totalPages = result.pagination.pages;
-
-        $("#page-info").textContent =
-            `Page ${currentPage} / ${totalPages}`;
-
-        $("#prev-page").disabled = currentPage <= 1;
-        $("#next-page").disabled = currentPage >= totalPages;
-
-        if (result.expenses.length === 0) {
-            list.appendChild(
-                createElement("p", "", "No expenses found.")
-            );
-            return;
-        }
-
-        result.expenses.forEach(expense => {
-            const item = createElement("div", "expense-item");
-
-            const details = createElement("div", "expense-details");
-
-            details.appendChild(
-                createElement("strong", "", expense.category_name)
-            );
-
-            details.appendChild(
-                createElement("span", "", expense.description || "No description")
-            );
-
-            details.appendChild(
-                createElement("small", "", expense.expense_date)
-            );
-
-            const amount = createElement(
-                "span",
-                "expense-amount",
-                formatMoney(expense.amount)
-            );
-
-            const button = createElement("button", "", "Delete");
-
-            button.addEventListener("click", () => {
-                deleteExpense(expense.id);
-            });
-
-            item.append(details, amount, button);
-
-            list.appendChild(item);
-        });
-
-    } catch (error) {
-        showMessage(error.message, "error");
+        loadExpenses();
+        loadStatistics();
+        showMessage("Витрату додано!");
+    } catch (err) {
+        showMessage(err.message, "error");
     }
 }
 
 async function deleteExpense(id) {
-    if (!confirm("Delete this expense?")) return;
-
     try {
-        await api("/api/expenses/" + encodeURIComponent(id), {
+        await api(`/api/expenses/${id}`, {
             method: "DELETE"
         });
 
-        await loadExpenses();
-        await loadStatistics();
-
-        showMessage("Expense deleted");
-
-    } catch (error) {
-        showMessage(error.message, "error");
+        loadExpenses();
+        loadStatistics();
+        showMessage("Витрату видалено.");
+    } catch (err) {
+        showMessage(err.message, "error");
     }
 }
-
-$("#filter-expenses").addEventListener("click", () => {
-    currentPage = 1;
-    loadExpenses();
-});
-
-$("#clear-filter").addEventListener("click", () => {
-    $("#filter-start").value = "";
-    $("#filter-end").value = "";
-
-    currentPage = 1;
-
-    loadExpenses();
-});
-
-$("#prev-page").addEventListener("click", () => {
-    if (currentPage > 1) {
-        currentPage--;
-        loadExpenses();
-    }
-});
-
-$("#next-page").addEventListener("click", () => {
-    if (currentPage < totalPages) {
-        currentPage++;
-        loadExpenses();
-    }
-});
 
 // ==========================================
 // STATISTICS
 // ==========================================
 
-function getStatisticsURL() {
-    const period = $("#period").value;
-
-    if (period === "custom") {
-        const start = $("#start-date").value;
-        const end = $("#end-date").value;
-
-        if (!start || !end || start > end) {
-            throw new Error("Select a valid date range");
-        }
-
-        return `/api/statistics/summary?start=${start}&end=${end}`;
-    }
-
-    return `/api/statistics/summary?period=${period}`;
-}
-
 async function loadStatistics() {
     try {
-        const result = await api(getStatisticsURL());
-
-        $("#total-expenses").textContent =
-            formatMoney(result.summary.total_expenses);
-
-        $("#transaction-count").textContent =
-            result.summary.transactions_count;
-
-        $("#average-expense").textContent =
-            formatMoney(result.summary.average_expense);
-
-        const container = $("#category-stats");
-
-        container.replaceChildren();
-
-        if (result.categories.length === 0) {
-            container.appendChild(
-                createElement("p", "", "No expenses for this period.")
-            );
-            return;
+        const data = await api("/api/statistics/summary");
+        const statsSummaryContainer = $("#stats-summary");
+        
+        if (statsSummaryContainer && data.summary) {
+            statsSummaryContainer.innerHTML = `
+                <p><strong>Загалом витрачено:</strong> ${formatMoney(data.summary.total_expenses)}</p>
+                <p><strong>Кількість транзакцій:</strong> ${data.summary.transactions_count}</p>
+                <p><strong>Середня витрата:</strong> ${formatMoney(data.summary.average_expense)}</p>
+            `;
         }
-
-        result.categories.forEach(category => {
-            const item = createElement("div", "category-stat");
-
-            const label = createElement(
-                "div",
-                "",
-                `${category.name}: ${formatMoney(category.total)} (${category.percentage}%)`
-            );
-
-            const progress = createElement("div", "progress");
-            const bar = createElement("div", "progress-bar");
-
-            bar.style.width = category.percentage + "%";
-
-            progress.appendChild(bar);
-
-            item.append(label, progress);
-
-            container.appendChild(item);
-        });
-
-    } catch (error) {
-        showMessage(error.message, "error");
+    } catch (err) {
+        console.error("Failed to load statistics:", err);
     }
 }
 
-$("#period").addEventListener("change", () => {
-    const custom = $("#period").value === "custom";
-
-    $("#custom-dates").hidden = !custom;
-
-    if (!custom) loadStatistics();
-});
-
-$("#apply-dates").addEventListener("click", loadStatistics);
-
 // ==========================================
-// INITIALIZATION
+// EVENT LISTENERS & INIT
 // ==========================================
 
-async function initialize() {
+document.addEventListener("DOMContentLoaded", async () => {
+    // Обробник форми реєстрації
+    const registerForm = $("#register-form");
+    if (registerForm) {
+        registerForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const username = $("#register-username")?.value.trim();
+            const email = $("#register-email")?.value.trim();
+            const password = $("#register-password")?.value;
+
+            try {
+                const data = await api("/api/auth/register", {
+                    method: "POST",
+                    body: JSON.stringify({ username, email, password })
+                });
+                showApp(data.user);
+                showMessage("Реєстрація успішна!");
+            } catch (err) {
+                showMessage(err.message, "error");
+            }
+        });
+    }
+
+    // Обробник форми логіну
+    const loginForm = $("#login-form");
+    if (loginForm) {
+        loginForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const login = $("#login-value")?.value.trim();
+            const password = $("#login-password")?.value;
+
+            try {
+                const data = await api("/api/auth/login", {
+                    method: "POST",
+                    body: JSON.stringify({ login, password })
+                });
+                showApp(data.user);
+                showMessage("Вхід виконано успішно!");
+            } catch (err) {
+                showMessage(err.message, "error");
+            }
+        });
+    }
+
+    // Кнопка виходу
+    const logoutBtn = $("#logout-btn");
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", async () => {
+            try {
+                await api("/api/auth/logout", { method: "POST" });
+                showAuth();
+                showMessage("Ви вийшли з системи.");
+            } catch (err) {
+                showMessage(err.message, "error");
+            }
+        });
+    }
+
+    // Створення категорії
+    const createCategoryForm = $("#create-category-form");
+    if (createCategoryForm) {
+        createCategoryForm.addEventListener("submit", handleCreateCategory);
+    }
+
+    // Створення витрати
+    const createExpenseForm = $("#create-expense-form");
+    if (createExpenseForm) {
+        createExpenseForm.addEventListener("submit", handleCreateExpense);
+    }
+
+    // Пагінація
+    const prevPageBtn = $("#prev-page");
+    const nextPageBtn = $("#next-page");
+
+    if (prevPageBtn) {
+        prevPageBtn.addEventListener("click", () => {
+            if (currentPage > 1) {
+                currentPage--;
+                loadExpenses();
+            }
+        });
+    }
+
+    if (nextPageBtn) {
+        nextPageBtn.addEventListener("click", () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                loadExpenses();
+            }
+        });
+    }
+
+    // Перевірка поточної сесії при завантаженні сторінки
     try {
-        const result = await api("/api/auth/me");
-
-        showApp(result.user);
-
+        const data = await api("/api/auth/me");
+        if (data.success && data.user) {
+            showApp(data.user);
+        } else {
+            showAuth();
+        }
     } catch {
         showAuth();
     }
-}
-
-initialize();
+});

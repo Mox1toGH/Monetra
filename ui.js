@@ -42,6 +42,8 @@
             filter: "Filter", clear: "Clear", previous: "Previous", next: "Next", page: "Page",
             amountUah: "Amount, UAH", category: "Category", description: "Description", date: "Date",
             name: "Name", cancel: "Cancel", createCategory: "Create category",
+            color: "Color", edit: "Edit", editCategory: "Edit category", saveCategory: "Save changes",
+            editCatNamePrompt: "Enter new category name:", editCatColorPrompt: "Enter new HEX color (e.g. #3498DB):",
             descPlaceholder: "e.g. Groceries", catPlaceholder: "e.g. Subscriptions",
             accountTitle: "Account", profile: "Profile", preferences: "Preferences",
             theme: "Theme", themeLight: "Light", themeDark: "Dark",
@@ -52,7 +54,7 @@
             noExpenses: "No expenses found.", noStats: "No expenses for this period.",
             other: "Other",
             mCreated: "Account created successfully!", mLogin: "Login successful!", mLogout: "Logged out",
-            mCatCreated: "Category created!", mCatDeleted: "Category deleted",
+            mCatCreated: "Category created!", mCatUpdated: "Category updated!", mCatDeleted: "Category deleted",
             mExpAdded: "Expense added!", mExpDeleted: "Expense deleted",
             mInvalidAmount: "Invalid amount", mInvalidRange: "Select a valid date range",
             mInvalidApi: "Invalid API response", mFailed: "Request failed",
@@ -77,6 +79,8 @@
             filter: "Фільтрувати", clear: "Скинути", previous: "Назад", next: "Далі", page: "Сторінка",
             amountUah: "Сума, UAH", category: "Категорія", description: "Опис", date: "Дата",
             name: "Назва", cancel: "Скасувати", createCategory: "Створити категорію",
+            color: "Колір", edit: "Редагувати", editCategory: "Редагувати категорію", saveCategory: "Зберегти зміни",
+            editCatNamePrompt: "Введіть нову назву категорії:", editCatColorPrompt: "Введіть новий HEX колір (наприклад, #3498DB):",
             descPlaceholder: "Напр., продукти", catPlaceholder: "Напр., підписки",
             accountTitle: "Акаунт", profile: "Профіль", preferences: "Налаштування",
             theme: "Тема", themeLight: "Світла", themeDark: "Темна",
@@ -87,7 +91,7 @@
             noExpenses: "Витрат не знайдено.", noStats: "Немає витрат за цей період.",
             other: "Інше",
             mCreated: "Акаунт успішно створено!", mLogin: "Вхід виконано", mLogout: "Ви вийшли з акаунту",
-            mCatCreated: "Категорію створено", mCatDeleted: "Категорію видалено",
+            mCatCreated: "Категорію створено", mCatUpdated: "Категорію оновлено", mCatDeleted: "Категорію видалено",
             mExpAdded: "Витрату додано", mExpDeleted: "Витрату видалено",
             mInvalidAmount: "Некоректна сума", mInvalidRange: "Оберіть коректний діапазон дат",
             mInvalidApi: "Некоректна відповідь сервера", mFailed: "Помилка запиту",
@@ -96,23 +100,35 @@
         }
     };
 
-    // English strings produced by app.js -> translation keys
+    // English & Ukrainian strings produced by app.js -> translation keys
     const MESSAGES = {
         "Account created successfully!": "mCreated",
+        "Реєстрація успішна!": "mCreated",
         "Login successful!": "mLogin",
+        "Вхід виконано успішно!": "mLogin",
         "Logged out": "mLogout",
+        "Ви вийшли з системи.": "mLogout",
         "Category created!": "mCatCreated",
+        "Категорію успішно створено!": "mCatCreated",
+        "Category updated!": "mCatUpdated",
+        "Категорію оновлено!": "mCatUpdated",
         "Category deleted": "mCatDeleted",
+        "Категорію видалено.": "mCatDeleted",
         "Expense added!": "mExpAdded",
+        "Витрату додано!": "mExpAdded",
         "Expense deleted": "mExpDeleted",
+        "Витрату видалено.": "mExpDeleted",
         "Invalid amount": "mInvalidAmount",
+        "Некоректна сума": "mInvalidAmount",
         "Select a valid date range": "mInvalidRange",
+        "Оберіть коректний діапазон дат": "mInvalidRange",
         "Invalid API response": "mInvalidApi",
         "Request failed": "mFailed"
     };
 
     const CONFIRMS = {
         "Delete this category? Its expenses will move to Other.": "cCategory",
+        "Ви впевнені? Всі витрати з цієї категорії будуть перенесені в 'Other'.": "cCategory",
         "Delete this expense?": "cExpense"
     };
 
@@ -257,18 +273,35 @@
             item.dataset.done = "1";
 
             const details = $(".expense-details", item);
-            const [category, description, date] = details.children;
+            if (details) {
+                const [category, description, date] = details.children;
 
-            flagOther(category);
+                if (category) flagOther(category);
 
-            if (description.textContent === "No description") {
-                description.dataset.i18n = "noDescription";
-                description.classList.add("muted");
+                if (description && (description.textContent === "No description" || description.textContent === "Без опису")) {
+                    description.dataset.i18n = "noDescription";
+                    description.classList.add("muted");
+                }
+
+                if (date) localizeDate(date);
+            } else {
+                const category = $(".expense-category-badge", item);
+                if (category) flagOther(category);
+
+                const desc = $(".expense-desc", item);
+                if (desc && (desc.textContent === "No description" || desc.textContent === "Без опису")) {
+                    desc.dataset.i18n = "noDescription";
+                    desc.classList.add("muted");
+                }
+
+                const date = $(".expense-date", item);
+                if (date) localizeDate(date);
             }
 
-            localizeDate(date);
             localizeMoney($(".expense-amount", item));
-            makeIconButton($("button", item), "trash", "delete");
+
+            const delBtn = $(".btn-delete-expense", item) || $("button", item);
+            if (delBtn) makeIconButton(delBtn, "trash", "delete");
         });
 
         $$("#expenses-list > p:not([data-done])").forEach((p) => {
@@ -284,10 +317,21 @@
         $$("#categories-list .category-item:not([data-done])").forEach((item) => {
             item.dataset.done = "1";
 
-            flagOther($("span", item));
+            const nameSpan = $(".category-name", item) || $("span:not(.category-color-badge)", item);
+            if (nameSpan) flagOther(nameSpan);
 
-            const button = $("button", item);
-            if (button) makeIconButton(button, "trash", "delete");
+            const editBtn = $(".btn-edit", item);
+            if (editBtn) {
+                editBtn.type = "button";
+                editBtn.className = "icon-btn";
+                editBtn.replaceChildren(icon("edit"));
+                editBtn.setAttribute("data-i18n-aria", "edit");
+            }
+
+            const deleteBtn = $(".btn-delete", item) || $("button:not(.btn-edit)", item);
+            if (deleteBtn) {
+                makeIconButton(deleteBtn, "trash", "delete");
+            }
         });
 
         applyStatic($("#categories-list"));
@@ -322,6 +366,19 @@
 
             label.className = "stat-label";
             label.replaceChildren(name, values);
+
+            const catName = match[1].trim();
+            const cache = window.categoriesCache || [];
+            const cat = cache.find((c) => c.name && c.name.toLowerCase() === catName.toLowerCase());
+            if (cat && cat.color) {
+                const dot = document.createElement("span");
+                dot.className = "category-color-badge sm";
+                dot.style.backgroundColor = cat.color;
+                name.prepend(dot);
+
+                const bar = $(".progress-bar", item);
+                if (bar) bar.style.backgroundColor = cat.color;
+            }
         });
 
         $$("#category-stats > p:not([data-done])").forEach((p) => {
@@ -421,6 +478,20 @@
     window.confirm = (message) => {
         const key = CONFIRMS[message];
         return nativeConfirm(key ? t(key) : message);
+    };
+
+    // Native prompt() dialogs from app.js, translated
+    const nativePrompt = window.prompt.bind(window);
+    const PROMPTS = {
+        "Введіть нову назву категорії:": "editCatNamePrompt",
+        "Enter new category name:": "editCatNamePrompt",
+        "Введіть новий HEX колір (наприклад, #3498DB):": "editCatColorPrompt",
+        "Enter new HEX color (e.g. #3498DB):": "editCatColorPrompt"
+    };
+
+    window.prompt = (message, defaultValue) => {
+        const key = PROMPTS[message];
+        return nativePrompt(key ? t(key) : message, defaultValue);
     };
 
     // ------------------------------------------
@@ -576,6 +647,120 @@
     watch("#app-section", syncApp, { attributes: true, attributeFilter: ["hidden"] });
 
     // ------------------------------------------
+    // Color pickers and category dialogs
+    // ------------------------------------------
+
+    function initColorPickers(root = document) {
+        $$(".color-swatches", root).forEach((container) => {
+            const targetId = container.dataset.target;
+            const input = document.getElementById(targetId);
+            if (!input) return;
+
+            const valDisplay = input.parentElement ? $(".color-value", input.parentElement) : null;
+
+            const sync = (hex) => {
+                const upper = (hex || "").toUpperCase();
+                if (valDisplay) setText(valDisplay, upper);
+                $$(".color-swatch", container).forEach((swatch) => {
+                    const match = (swatch.dataset.color || "").toUpperCase() === upper;
+                    swatch.classList.toggle("active", match);
+                });
+            };
+
+            input.addEventListener("input", () => sync(input.value));
+            input.addEventListener("change", () => sync(input.value));
+
+            container.addEventListener("click", (e) => {
+                const swatch = e.target.closest(".color-swatch");
+                if (!swatch) return;
+                const color = swatch.dataset.color;
+                if (!color) return;
+                input.value = color;
+                sync(color);
+                input.dispatchEvent(new Event("change", { bubbles: true }));
+            });
+
+            sync(input.value);
+        });
+    }
+
+    function setupEditCategoryDialog() {
+        const dialog = $("#edit-category-dialog");
+        const form = $("#edit-category-form");
+        if (!dialog || !form) return;
+
+        window.openEditCategoryModal = (cat) => {
+            $("#edit-category-id").value = cat.id;
+            $("#edit-category-name-input").value = cat.name;
+            const color = cat.color || "#64748B";
+            const colorInput = $("#edit-category-color-input");
+            if (colorInput) {
+                colorInput.value = color;
+                colorInput.dispatchEvent(new Event("input", { bubbles: true }));
+            }
+            dialog.showModal();
+        };
+
+        if (!form.dataset.bound) {
+            form.dataset.bound = "1";
+            form.addEventListener("submit", async (event) => {
+                event.preventDefault();
+                const id = $("#edit-category-id").value;
+                const nameInput = $("#edit-category-name-input");
+                const colorInput = $("#edit-category-color-input");
+
+                if (!nameInput) return;
+
+                try {
+                    if (typeof window.api === "function") {
+                        await window.api(`/api/categories/${id}`, {
+                            method: "PATCH",
+                            body: JSON.stringify({
+                                name: nameInput.value.trim(),
+                                color: colorInput ? colorInput.value.trim() : "#64748B"
+                            })
+                        });
+                    }
+
+                    if (typeof window.loadCategories === "function") window.loadCategories();
+                    if (typeof window.loadExpenses === "function") window.loadExpenses();
+                    if (typeof window.loadStatistics === "function") window.loadStatistics();
+
+                    if (typeof window.showMessage === "function") {
+                        window.showMessage("Категорію оновлено!");
+                    }
+                    dialog.close();
+                } catch (err) {
+                    if (typeof window.showMessage === "function") {
+                        window.showMessage(err.message, "error");
+                    }
+                }
+            });
+        }
+    }
+
+    const createCategoryFormEl = $("#create-category-form");
+    if (createCategoryFormEl) {
+        createCategoryFormEl.addEventListener("reset", () => {
+            setTimeout(() => {
+                const colorInput = $("#category-color-input");
+                if (colorInput) {
+                    colorInput.value = "#64748B";
+                    colorInput.dispatchEvent(new Event("input", { bubbles: true }));
+                }
+            }, 0);
+        });
+        createCategoryFormEl.addEventListener("submit", () => {
+            setTimeout(() => {
+                const colorInput = $("#category-color-input");
+                if (colorInput) {
+                    colorInput.dispatchEvent(new Event("input", { bubbles: true }));
+                }
+            }, 100);
+        });
+    }
+
+    // ------------------------------------------
     // Init
     // ------------------------------------------
 
@@ -584,6 +769,10 @@
 
     localizeMoney($("#total-expenses"));
     localizeMoney($("#average-expense"));
+
+    initColorPickers();
+    setupEditCategoryDialog();
+    window.addEventListener("DOMContentLoaded", setupEditCategoryDialog);
 
     syncApp();
 })();

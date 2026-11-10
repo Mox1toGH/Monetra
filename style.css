@@ -485,13 +485,77 @@ main {
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    min-height: 46px;
-    border-bottom: 1px solid var(--line);
+    min-height: 44px;
+    padding: 8px 10px !important;
+    margin-bottom: 6px;
+    border: 1px solid var(--line) !important;
+    border-radius: var(--radius) !important;
+    background: var(--surface);
     font-weight: 500;
 }
 
 .category-item:last-child {
-    border-bottom: 0;
+    margin-bottom: 0;
+}
+
+.category-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.category-color-badge {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
+}
+
+.category-color-badge.sm {
+    width: 10px;
+    height: 10px;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+
+.category-name {
+    font-weight: 500;
+    overflow-wrap: anywhere;
+}
+
+.category-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.btn-edit,
+.btn-delete {
+    height: 32px;
+    padding: 0 10px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--ink);
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.btn-edit:hover {
+    background: var(--hover);
+}
+
+.btn-delete {
+    color: var(--danger);
+    border-color: transparent;
+}
+
+.btn-delete:hover {
+    border-color: var(--danger);
 }
 
 .controls {
@@ -513,11 +577,48 @@ main {
     align-items: center;
     gap: 16px;
     padding: 14px 0;
-    border-bottom: 1px solid var(--line);
+    border-bottom: 1px solid var(--line) !important;
 }
 
 .expense-item:last-child {
     border-bottom: 0;
+}
+
+.expense-category-badge {
+    display: inline-block;
+    padding: 2px 8px !important;
+    border-radius: 12px !important;
+    font-size: 11px !important;
+    font-weight: 600;
+    color: #fff !important;
+    margin-right: 8px;
+    letter-spacing: 0.02em;
+    vertical-align: middle;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.expense-date {
+    color: var(--muted) !important;
+}
+
+.btn-delete-expense {
+    display: inline-grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    color: var(--muted);
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.btn-delete-expense:hover {
+    color: var(--danger);
+    border-color: var(--danger);
 }
 
 .expense-details {
@@ -751,6 +852,74 @@ main {
     justify-content: flex-end;
     gap: 10px;
     margin-top: 6px;
+}
+
+/* ---------- Color Picker ---------- */
+
+.color-picker-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.color-input {
+    width: 44px;
+    height: 40px;
+    padding: 2px 4px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.color-input::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+.color-input::-webkit-color-swatch {
+    border: 0;
+    border-radius: calc(var(--radius) - 1px);
+}
+
+.color-input::-moz-color-swatch {
+    border: 0;
+    border-radius: calc(var(--radius) - 1px);
+}
+
+.color-value {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+}
+
+.color-swatches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.color-swatch {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: var(--c);
+    border: 2px solid transparent;
+    padding: 0;
+    cursor: pointer;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+    flex-shrink: 0;
+}
+
+.color-swatch:hover {
+    transform: scale(1.15);
+}
+
+.color-swatch.active {
+    border-color: var(--ink);
+    box-shadow: 0 0 0 2px var(--surface);
 }
 
 /* ---------- Toast ---------- */
