@@ -276,9 +276,21 @@ async function deleteCategory(id) {
 
 async function loadExpenses() {
     try {
-        const data = await api(`/api/expenses?page=${currentPage}`);
+        const params = new URLSearchParams();
+        params.set("page", currentPage);
+        params.set("limit", 10);
+        params.set("sort", "date_desc");
+
+        const start = $("#filter-start")?.value;
+        const end = $("#filter-end")?.value;
+        const cat = $("#filter-category")?.value;
+        if (start) params.set("start", start);
+        if (end) params.set("end", end);
+        if (cat) params.set("category_id", cat);
+
+        const data = await api(`/api/expenses?${params.toString()}`);
         renderExpensesList(data.expenses || []);
-        totalPages = data.pagination.pages || 1;
+        totalPages = (data.pagination && data.pagination.pages) || 1;
         
         const pageInfo = $("#page-info");
         if (pageInfo) {
@@ -302,39 +314,25 @@ function renderExpensesList(expenses) {
 
     expenses.forEach(exp => {
         const item = createElement("div", "expense-item");
-        item.style.display = "flex";
-        item.style.justifyContent = "space-between";
-        item.style.alignItems = "center";
-        item.style.padding = "10px";
-        item.style.borderBottom = "1px solid #e2e8f0";
 
-        const left = createElement("div");
+        const left = createElement("div", "expense-item-left");
         
         const catBadge = createElement("span", "expense-category-badge", exp.category_name);
         catBadge.style.backgroundColor = exp.category_color || "#64748B";
-        catBadge.style.color = "#fff";
-        catBadge.style.padding = "2px 8px";
-        catBadge.style.borderRadius = "12px";
-        catBadge.style.fontSize = "12px";
-        catBadge.style.marginRight = "8px";
 
+        const meta = createElement("div", "expense-meta");
         const desc = createElement("span", "expense-desc", exp.description || "Без опису");
-        const dateSpan = createElement("span", "expense-date", ` (${exp.expense_date})`);
-        dateSpan.style.fontSize = "12px";
-        dateSpan.style.color = "#648299";
+        const dateSpan = createElement("span", "expense-date", exp.expense_date);
+
+        meta.appendChild(desc);
+        meta.appendChild(dateSpan);
 
         left.appendChild(catBadge);
-        left.appendChild(desc);
-        left.appendChild(dateSpan);
+        left.appendChild(meta);
         item.appendChild(left);
 
-        const right = createElement("div");
-        right.style.display = "flex";
-        right.style.alignItems = "center";
-        right.style.gap = "10px";
-
+        const right = createElement("div", "expense-item-right");
         const amountSpan = createElement("span", "expense-amount", formatMoney(exp.amount));
-        amountSpan.style.fontWeight = "600";
 
         const delBtn = createElement("button", "btn-delete-expense", "×");
         delBtn.title = "Видалити витрату";
@@ -404,17 +402,61 @@ async function deleteExpense(id) {
 // STATISTICS
 // ==========================================
 
+function getStatisticsURL() {
+    const periodSelect = $("#period");
+    const period = periodSelect ? periodSelect.value : "month";
+
+    if (period === "custom") {
+        const start = $("#start-date")?.value;
+        const end = $("#end-date")?.value;
+
+        if (start && end && start <= end) {
+            return `/api/statistics/summary?start=${start}&end=${end}`;
+        }
+    }
+
+    return `/api/statistics/summary?period=${period}`;
+}
+
 async function loadStatistics() {
     try {
-        const data = await api("/api/statistics/summary");
-        const statsSummaryContainer = $("#stats-summary");
+        const url = getStatisticsURL();
+        const data = await api(url);
         
-        if (statsSummaryContainer && data.summary) {
-            statsSummaryContainer.innerHTML = `
-                <p><strong>Загалом витрачено:</strong> ${formatMoney(data.summary.total_expenses)}</p>
-                <p><strong>Кількість транзакцій:</strong> ${data.summary.transactions_count}</p>
-                <p><strong>Середня витрата:</strong> ${formatMoney(data.summary.average_expense)}</p>
-            `;
+        if (data.summary) {
+            if ($("#total-expenses")) $("#total-expenses").textContent = formatMoney(data.summary.total_expenses);
+            if ($("#transaction-count")) $("#transaction-count").textContent = data.summary.transactions_count;
+            if ($("#average-expense")) $("#average-expense").textContent = formatMoney(data.summary.average_expense);
+        }
+
+        const container = $("#category-stats");
+        if (container) {
+            container.innerHTML = "";
+            const categories = data.categories || [];
+            
+            if (categories.length === 0) {
+                container.innerHTML = `<p class="empty" data-i18n="noStats">Немає витрат за цей період.</p>`;
+            } else {
+                categories.forEach(category => {
+                    const item = createElement("div", "category-stat");
+                    const label = createElement(
+                        "div",
+                        "stat-label",
+                        `${category.name}: ${formatMoney(category.total)} (${category.percentage}%)`
+                    );
+                    const progress = createElement("div", "progress");
+                    const bar = createElement("div", "progress-bar");
+                    bar.style.width = category.percentage + "%";
+                    if (category.color) bar.style.backgroundColor = category.color;
+                    progress.appendChild(bar);
+                    item.append(label, progress);
+                    container.appendChild(item);
+                });
+            }
+
+            if (typeof window.renderDonutChart === "function") {
+                window.renderDonutChart(categories, data.summary ? data.summary.total_expenses : 0);
+            }
         }
     } catch (err) {
         console.error("Failed to load statistics:", err);
@@ -493,6 +535,41 @@ document.addEventListener("DOMContentLoaded", async () => {
     const createExpenseForm = $("#create-expense-form");
     if (createExpenseForm) {
         createExpenseForm.addEventListener("submit", handleCreateExpense);
+    }
+
+    // Період та фільтр дат статистики
+    const periodSelect = $("#period");
+    if (periodSelect) {
+        periodSelect.addEventListener("change", () => {
+            const custom = periodSelect.value === "custom";
+            if ($("#custom-dates")) $("#custom-dates").hidden = !custom;
+            if (!custom) loadStatistics();
+        });
+    }
+
+    const applyDatesBtn = $("#apply-dates");
+    if (applyDatesBtn) {
+        applyDatesBtn.addEventListener("click", loadStatistics);
+    }
+
+    // Фільтр історії витрат
+    const filterBtn = $("#filter-expenses");
+    if (filterBtn) {
+        filterBtn.addEventListener("click", () => {
+            currentPage = 1;
+            loadExpenses();
+        });
+    }
+
+    const clearFilterBtn = $("#clear-filter");
+    if (clearFilterBtn) {
+        clearFilterBtn.addEventListener("click", () => {
+            if ($("#filter-start")) $("#filter-start").value = "";
+            if ($("#filter-end")) $("#filter-end").value = "";
+            if ($("#filter-category")) $("#filter-category").value = "";
+            currentPage = 1;
+            loadExpenses();
+        });
     }
 
     // Пагінація

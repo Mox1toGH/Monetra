@@ -32,27 +32,39 @@
             registerTitle: "Create your account", registerSub: "Start tracking your expenses in a few seconds.",
             loginLabel: "Username or email", password: "Password", passwordHint: "At least 12 characters",
             username: "Username", email: "Email",
-            overviewTitle: "Overview", addCategory: "Add category", addExpense: "Add expense",
+            overviewTitle: "Overview", overviewSubtitle: "Track and optimize your daily expenses",
+            manageCategories: "Categories", manageCategoriesTitle: "Manage categories",
+            yourCategories: "Your categories", createNewCategory: "New category",
+            addCategory: "Add category", addExpense: "Add expense",
             summary: "Summary", period: "Period",
             periodDay: "Today", periodWeek: "This week", periodMonth: "This month",
             periodYear: "This year", periodCustom: "Custom period",
             from: "From", to: "To", apply: "Apply",
             totalExpenses: "Total expenses", transactions: "Transactions", averageExpense: "Average expense",
-            byCategory: "By category", categories: "Categories", history: "Expenses history",
-            filter: "Filter", clear: "Clear", previous: "Previous", next: "Next", page: "Page",
+            totalPeriod: "Total for period", recordsCount: "recorded transactions", perTransaction: "per transaction",
+            byCategory: "By category", expensesByCategory: "Expenses by category",
+            categoryBreakdownSub: "Breakdown and structure of your spending", analyticsBadge: "Analytics",
+            categories: "Categories", history: "Expenses history", historySub: "Timeline of your financial activities",
+            filter: "Filter", clear: "Clear", filterCategory: "All categories",
+            previous: "Previous", next: "Next", page: "Page",
             amountUah: "Amount, UAH", category: "Category", description: "Description", date: "Date",
             name: "Name", cancel: "Cancel", createCategory: "Create category",
             color: "Color", edit: "Edit", editCategory: "Edit category", saveCategory: "Save changes",
             editCatNamePrompt: "Enter new category name:", editCatColorPrompt: "Enter new HEX color (e.g. #3498DB):",
             descPlaceholder: "e.g. Groceries", catPlaceholder: "e.g. Subscriptions",
-            accountTitle: "Account", profile: "Profile", preferences: "Preferences",
+            accountTitle: "Account", accountSubtitle: "Manage your profile and application preferences",
+            profile: "Profile", activeAccount: "Active account", personalInfo: "Personal info",
+            appPreferences: "Appearance & Language", preferences: "Preferences",
             theme: "Theme", themeLight: "Light", themeDark: "Dark",
-            session: "Session", sessionText: "You will need to sign in again to access your data.",
+            themeDesc: "Light or dark visual theme", languageDesc: "Monetra interface language",
+            securitySession: "Security & Session", session: "Session",
+            sessionActive: "Session is active", sessionText: "You will need to sign in again to access your data.",
             signOut: "Sign out", signedInAs: "Signed in as {name}", notLoggedIn: "Not logged in",
             memberSince: "Member since",
             delete: "Delete", noDescription: "No description",
-            noExpenses: "No expenses found.", noStats: "No expenses for this period.",
-            other: "Other",
+            noExpenses: "No expenses found", noExpensesDesc: "No expenses found for this period. Try changing filters or add a new expense.",
+            noStats: "No expenses for this period.", addFirstExpense: "Add first expense",
+            other: "Other", authTagline: "Smart expense tracking",
             mCreated: "Account created successfully!", mLogin: "Login successful!", mLogout: "Logged out",
             mCatCreated: "Category created!", mCatUpdated: "Category updated!", mCatDeleted: "Category deleted",
             mExpAdded: "Expense added!", mExpDeleted: "Expense deleted",
@@ -69,27 +81,39 @@
             registerTitle: "Створіть акаунт", registerSub: "Почніть вести облік витрат за кілька секунд.",
             loginLabel: "Ім’я користувача або email", password: "Пароль", passwordHint: "Щонайменше 12 символів",
             username: "Ім’я користувача", email: "Електронна пошта",
-            overviewTitle: "Огляд", addCategory: "Додати категорію", addExpense: "Додати витрату",
+            overviewTitle: "Огляд", overviewSubtitle: "Відстежуйте та оптимізуйте свої витрати",
+            manageCategories: "Категорії", manageCategoriesTitle: "Керування категоріями",
+            yourCategories: "Ваші категорії", createNewCategory: "Нова категорія",
+            addCategory: "Додати категорію", addExpense: "Додати витрату",
             summary: "Підсумок", period: "Період",
             periodDay: "Сьогодні", periodWeek: "Цього тижня", periodMonth: "Цього місяця",
             periodYear: "Цього року", periodCustom: "Довільний період",
             from: "Від", to: "До", apply: "Застосувати",
             totalExpenses: "Загальні витрати", transactions: "Транзакції", averageExpense: "Середня витрата",
-            byCategory: "За категоріями", categories: "Категорії", history: "Історія витрат",
-            filter: "Фільтрувати", clear: "Скинути", previous: "Назад", next: "Далі", page: "Сторінка",
+            totalPeriod: "за обраний період", recordsCount: "зафіксованих операцій", perTransaction: "на одну транзакцію",
+            byCategory: "За категоріями", expensesByCategory: "Розподіл за категоріями",
+            categoryBreakdownSub: "Структура та розподіл ваших витрат", analyticsBadge: "Аналітика",
+            categories: "Категорії", history: "Історія витрат", historySub: "Хронологія ваших фінансових операцій",
+            filter: "Фільтрувати", clear: "Скинути", filterCategory: "Всі категорії",
+            previous: "Назад", next: "Далі", page: "Сторінка",
             amountUah: "Сума, UAH", category: "Категорія", description: "Опис", date: "Дата",
             name: "Назва", cancel: "Скасувати", createCategory: "Створити категорію",
             color: "Колір", edit: "Редагувати", editCategory: "Редагувати категорію", saveCategory: "Зберегти зміни",
             editCatNamePrompt: "Введіть нову назву категорії:", editCatColorPrompt: "Введіть новий HEX колір (наприклад, #3498DB):",
             descPlaceholder: "Напр., продукти", catPlaceholder: "Напр., підписки",
-            accountTitle: "Акаунт", profile: "Профіль", preferences: "Налаштування",
+            accountTitle: "Акаунт", accountSubtitle: "Керування обліковим записом та параметрами застосунку",
+            profile: "Профіль", activeAccount: "Активний акаунт", personalInfo: "Персональні дані",
+            appPreferences: "Вигляд та мова", preferences: "Налаштування",
             theme: "Тема", themeLight: "Світла", themeDark: "Темна",
-            session: "Сесія", sessionText: "Після виходу потрібно буде увійти знову, щоб отримати доступ до своїх даних.",
+            themeDesc: "Світле або темне оформлення", languageDesc: "Мова інтерфейсу Monetra",
+            securitySession: "Безпека та сесія", session: "Сесія",
+            sessionActive: "Сесія активна", sessionText: "Після виходу потрібно буде увійти знову, щоб отримати доступ до своїх даних.",
             signOut: "Вийти", signedInAs: "Ви увійшли як {name}", notLoggedIn: "Ви не авторизовані",
             memberSince: "З нами з",
             delete: "Видалити", noDescription: "Без опису",
-            noExpenses: "Витрат не знайдено.", noStats: "Немає витрат за цей період.",
-            other: "Інше",
+            noExpenses: "Витрат не знайдено", noExpensesDesc: "Витрат не знайдено за цей період. Спробуйте змінити фільтри або додайте нову витрату.",
+            noStats: "Немає витрат за цей період.", addFirstExpense: "Додати першу витрату",
+            other: "Інше", authTagline: "Фінанси під контролем",
             mCreated: "Акаунт успішно створено!", mLogin: "Вхід виконано", mLogout: "Ви вийшли з акаунту",
             mCatCreated: "Категорію створено", mCatUpdated: "Категорію оновлено", mCatDeleted: "Категорію видалено",
             mExpAdded: "Витрату додано", mExpDeleted: "Витрату видалено",
@@ -261,8 +285,125 @@
         setText(el, name ? t("signedInAs").replace("{name}", name) : t("notLoggedIn"));
         setText($("#account-name"), name || "—");
         setText($("#account-username"), name || "—");
-        setText($("#account-avatar"), name ? name.charAt(0) : "?");
+        setText($("#account-avatar"), name ? name.charAt(0).toUpperCase() : "?");
     }
+
+    // ------------------------------------------
+    // Donut Chart Generator
+    // ------------------------------------------
+
+    function renderDonutChart(categories, totalAmount) {
+        const box = $("#donut-chart-box");
+        if (!box) return;
+
+        if (!categories || categories.length === 0) {
+            box.innerHTML = `
+                <svg class="donut-svg" viewBox="0 0 200 200">
+                    <circle cx="100" cy="100" r="70" fill="none" stroke="var(--line)" stroke-width="16" stroke-dasharray="4 6"/>
+                </svg>
+                <div class="donut-center-readout">
+                    <span class="donut-readout-sub" data-i18n="noStats">${t("noStats")}</span>
+                    <span class="donut-readout-val">0 ₴</span>
+                </div>
+            `;
+            return;
+        }
+
+        const radius = 70;
+        const circumference = 2 * Math.PI * radius; // ~439.82
+        let currentOffset = 0;
+        const gap = categories.length > 1 ? 4 : 0;
+
+        let paths = "";
+        categories.forEach((cat, index) => {
+            const pct = Math.max(0, Math.min(100, Number(cat.percentage) || 0));
+            const arcLength = (pct / 100) * circumference;
+            const strokeLen = Math.max(0.1, arcLength - gap);
+            const dashArray = `${strokeLen} ${circumference - strokeLen}`;
+            const dashOffset = -currentOffset;
+            currentOffset += arcLength;
+
+            const color = cat.color || "#64748B";
+
+            paths += `<circle class="donut-segment" cx="100" cy="100" r="${radius}"
+                stroke="${color}" stroke-width="20"
+                stroke-dasharray="${dashArray}"
+                stroke-dashoffset="${dashOffset}"
+                data-index="${index}"
+                data-name="${cat.name}"
+                data-total="${cat.total}"
+                data-pct="${cat.percentage}"
+                data-color="${color}"
+                tabindex="0"
+                role="graphics-symbol"
+                aria-label="${cat.name}: ${cat.percentage}%"
+            />`;
+        });
+
+        const totalFormatted = fmtMoney(totalAmount || 0);
+
+        box.innerHTML = `
+            <svg class="donut-svg" viewBox="0 0 200 200">
+                <circle cx="100" cy="100" r="${radius}" fill="none" stroke="var(--line-subtle)" stroke-width="20" />
+                ${paths}
+            </svg>
+            <div class="donut-center-readout">
+                <span class="donut-readout-sub" id="donut-sub-text">${t("totalPeriod")}</span>
+                <span class="donut-readout-val" id="donut-val-text">${totalFormatted}</span>
+                <span class="donut-readout-pct" id="donut-pct-text">100%</span>
+            </div>
+        `;
+
+        const subText = $("#donut-sub-text", box);
+        const valText = $("#donut-val-text", box);
+        const pctText = $("#donut-pct-text", box);
+
+        const resetReadout = () => {
+            setText(subText, t("totalPeriod"));
+            setText(valText, totalFormatted);
+            setText(pctText, "100%");
+            $$(".donut-segment", box).forEach((s) => s.classList.remove("highlight"));
+            $$("#category-stats .category-stat").forEach((el) => el.classList.remove("highlight"));
+        };
+
+        const highlightCategory = (catName, amount, pct, color, index) => {
+            setText(subText, catName);
+            setText(valText, fmtMoney(amount));
+            setText(pctText, `${pct}%`);
+            $$(".donut-segment", box).forEach((s) => {
+                s.classList.toggle("highlight", s.dataset.index === String(index));
+            });
+            $$("#category-stats .category-stat").forEach((el, i) => {
+                el.classList.toggle("highlight", i === index);
+            });
+        };
+
+        $$(".donut-segment", box).forEach((segment) => {
+            segment.addEventListener("mouseenter", () => {
+                const idx = Number(segment.dataset.index);
+                highlightCategory(
+                    segment.dataset.name,
+                    Number(segment.dataset.total) / 100,
+                    segment.dataset.pct,
+                    segment.dataset.color,
+                    idx
+                );
+            });
+            segment.addEventListener("mouseleave", resetReadout);
+        });
+
+        // Hover synchronization with list items
+        $$("#category-stats .category-stat").forEach((statRow, index) => {
+            const cat = categories[index];
+            if (!cat) return;
+            statRow.addEventListener("mouseenter", () => {
+                highlightCategory(cat.name, cat.total / 100, cat.percentage, cat.color, index);
+            });
+            statRow.addEventListener("mouseleave", resetReadout);
+        });
+    }
+
+    window.renderDonutChart = renderDonutChart;
 
     // ------------------------------------------
     // Enhance lists rendered by app.js
@@ -304,17 +445,31 @@
             if (delBtn) makeIconButton(delBtn, "trash", "delete");
         });
 
-        $$("#expenses-list > p:not([data-done])").forEach((p) => {
-            p.dataset.done = "1";
-            p.className = "empty";
-            p.dataset.i18n = "noExpenses";
-        });
+        const listContainer = $("#expenses-list");
+        if (listContainer) {
+            const rawEmptyP = $("> p", listContainer);
+            if (rawEmptyP) {
+                rawEmptyP.remove();
+                listContainer.innerHTML = `
+                    <div class="empty-state">
+                        <svg class="empty-state-icon"><use href="#i-receipt"/></svg>
+                        <p class="empty-state-title" data-i18n="noExpenses">${t("noExpenses")}</p>
+                        <p class="empty-state-sub" data-i18n="noExpensesDesc">${t("noExpensesDesc")}</p>
+                        <button type="button" class="btn primary sm" data-open="expense-dialog">
+                            <svg class="icon"><use href="#i-plus"/></svg>
+                            <span data-i18n="addExpense">${t("addExpense")}</span>
+                        </button>
+                    </div>
+                `;
+            }
+        }
 
         applyStatic($("#expenses-list"));
     }
 
     function enhanceCategories() {
-        $$("#categories-list .category-item:not([data-done])").forEach((item) => {
+        const items = $$("#categories-list .category-item:not([data-done])");
+        items.forEach((item) => {
             item.dataset.done = "1";
 
             const nameSpan = $(".category-name", item) || $("span:not(.category-color-badge)", item);
@@ -334,50 +489,82 @@
             }
         });
 
+        const allItems = $$("#categories-list .category-item");
+        setText($("#cat-count-badge"), String(allItems.length));
+
         applyStatic($("#categories-list"));
+        populateFilterCategorySelect();
     }
 
     function enhanceStats() {
-        $$("#category-stats .category-stat:not([data-done])").forEach((item) => {
-            item.dataset.done = "1";
+        const statItems = $$("#category-stats .category-stat");
+        const parsedCategories = [];
+        let totalSum = 0;
 
-            const label = item.firstElementChild;
-            const match = /^(.*): ([\d\s\u00a0\u202f.,]+) UAH \((.+)%\)$/s.exec(label.textContent);
+        statItems.forEach((item, index) => {
+            if (!item.dataset.done) {
+                item.dataset.done = "1";
 
-            if (!match) return;
+                const label = item.firstElementChild;
+                const match = /^(.*): ([\d\s\u00a0\u202f.,]+) UAH \((.+)%\)$/s.exec(label.textContent);
 
-            const name = document.createElement("span");
-            name.className = "stat-name";
-            name.textContent = match[1];
-            flagOther(name);
+                if (!match) return;
 
-            const amount = document.createElement("span");
-            amount.className = "stat-amount";
-            amount.textContent = match[2] + " UAH";
-            localizeMoney(amount);
+                const name = document.createElement("span");
+                name.className = "stat-name";
+                name.textContent = match[1];
+                flagOther(name);
 
-            const percent = document.createElement("span");
-            percent.className = "stat-pct";
-            percent.textContent = match[3] + "%";
+                const amount = document.createElement("span");
+                amount.className = "stat-amount";
+                amount.textContent = match[2] + " UAH";
+                localizeMoney(amount);
 
-            const values = document.createElement("span");
-            values.className = "stat-values";
-            values.append(amount, percent);
+                const percent = document.createElement("span");
+                percent.className = "stat-pct";
+                percent.textContent = match[3] + "%";
 
-            label.className = "stat-label";
-            label.replaceChildren(name, values);
+                const values = document.createElement("span");
+                values.className = "stat-values";
+                values.append(amount, percent);
 
-            const catName = match[1].trim();
-            const cache = window.categoriesCache || [];
-            const cat = cache.find((c) => c.name && c.name.toLowerCase() === catName.toLowerCase());
-            if (cat && cat.color) {
+                label.className = "stat-label";
+                label.replaceChildren(name, values);
+
+                const catName = match[1].trim();
+                const cache = window.categoriesCache || [];
+                const cat = cache.find((c) => c.name && c.name.toLowerCase() === catName.toLowerCase());
+                const color = (cat && cat.color) || "#64748B";
+
                 const dot = document.createElement("span");
                 dot.className = "category-color-badge sm";
-                dot.style.backgroundColor = cat.color;
+                dot.style.backgroundColor = color;
                 name.prepend(dot);
 
                 const bar = $(".progress-bar", item);
-                if (bar) bar.style.backgroundColor = cat.color;
+                if (bar) bar.style.backgroundColor = color;
+
+                const parsedAmt = Number(amount.dataset.amt || 0) * 100;
+                totalSum += parsedAmt;
+
+                parsedCategories.push({
+                    name: catName,
+                    color: color,
+                    total: parsedAmt,
+                    percentage: Number(match[3]) || 0
+                });
+            } else {
+                const nameEl = $(".stat-name", item);
+                const amtEl = $(".stat-amount", item);
+                const pctEl = $(".stat-pct", item);
+                const parsedAmt = Number(amtEl?.dataset.amt || 0) * 100;
+                totalSum += parsedAmt;
+                parsedCategories.push({
+                    name: nameEl?.textContent?.trim() || "",
+                    color: $(".category-color-badge", item)?.style.backgroundColor || "#64748B",
+                    total: parsedAmt,
+                    percentage: parseFloat(pctEl?.textContent || "0") || 0
+                });
             }
         });
 
@@ -388,13 +575,35 @@
         });
 
         applyStatic($("#category-stats"));
+
+        // Render Donut Chart
+        renderDonutChart(parsedCategories, totalSum / 100);
+    }
+
+    function populateFilterCategorySelect() {
+        const select = $("#filter-category");
+        if (!select) return;
+        const currentVal = select.value;
+
+        select.innerHTML = `<option value="" data-i18n="filterCategory">${t("filterCategory")}</option>`;
+
+        (window.categoriesCache || []).forEach((cat) => {
+            const opt = document.createElement("option");
+            opt.value = cat.id;
+            opt.textContent = cat.name;
+            select.appendChild(opt);
+        });
+
+        select.value = currentVal;
     }
 
     function enhanceCategorySelect() {
         const select = $("#expense-category");
-
-        $$("option", select).forEach(flagOther);
-        applyStatic(select);
+        if (select) {
+            $$("option", select).forEach(flagOther);
+            applyStatic(select);
+        }
+        populateFilterCategorySelect();
     }
 
     // ------------------------------------------
@@ -457,6 +666,14 @@
         syncPressed();
     }
 
+    function syncPeriodBadge() {
+        const select = $("#period");
+        const badge = $("#current-period-text");
+        if (select && badge && select.selectedOptions && select.selectedOptions[0]) {
+            setText(badge, select.selectedOptions[0].textContent);
+        }
+    }
+
     function applyLang(next) {
         lang = next === "en" ? "en" : "uk";
         document.documentElement.lang = lang;
@@ -469,6 +686,7 @@
 
         localizePageInfo();
         localizeUser();
+        syncPeriodBadge();
         syncPressed();
     }
 
@@ -536,6 +754,7 @@
             const user = data.user || {};
 
             setText($("#account-email"), user.email || "—");
+            setText($("#account-email-field"), user.email || "—");
 
             const created = user.created_at ? String(user.created_at).slice(0, 10) : "";
 
@@ -769,6 +988,10 @@
 
     localizeMoney($("#total-expenses"));
     localizeMoney($("#average-expense"));
+
+    const periodEl = $("#period");
+    if (periodEl) periodEl.addEventListener("change", syncPeriodBadge);
+    syncPeriodBadge();
 
     initColorPickers();
     setupEditCategoryDialog();

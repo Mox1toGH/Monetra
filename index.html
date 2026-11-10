@@ -81,6 +81,48 @@
             <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
             <path d="m15 5 4 4"/>
         </symbol>
+        <symbol id="i-wallet" viewBox="0 0 24 24">
+            <path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/>
+            <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/>
+        </symbol>
+        <symbol id="i-receipt" viewBox="0 0 24 24">
+            <path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1-2-1Z"/>
+            <path d="M14 8H8"/><path d="M16 12H8"/><path d="M13 16H8"/>
+        </symbol>
+        <symbol id="i-trending" viewBox="0 0 24 24">
+            <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+            <polyline points="16 7 22 7 22 13"/>
+        </symbol>
+        <symbol id="i-pie-chart" viewBox="0 0 24 24">
+            <path d="M21.21 15.89A10 10 0 1 1 8 2.83"/>
+            <path d="M22 12A10 10 0 0 0 12 2v10z"/>
+        </symbol>
+        <symbol id="i-filter" viewBox="0 0 24 24">
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+        </symbol>
+        <symbol id="i-calendar" viewBox="0 0 24 24">
+            <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+            <line x1="16" x2="16" y1="2" y2="6"/>
+            <line x1="8" x2="8" y1="2" y2="6"/>
+            <line x1="3" x2="21" y1="10" y2="10"/>
+        </symbol>
+        <symbol id="i-mail" viewBox="0 0 24 24">
+            <rect width="20" height="16" x="2" y="4" rx="2"/>
+            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+        </symbol>
+        <symbol id="i-lock" viewBox="0 0 24 24">
+            <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </symbol>
+        <symbol id="i-check" viewBox="0 0 24 24">
+            <polyline points="20 6 9 17 4 12"/>
+        </symbol>
+        <symbol id="i-sparkles" viewBox="0 0 24 24">
+            <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/>
+        </symbol>
+        <symbol id="i-shield" viewBox="0 0 24 24">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </symbol>
     </svg>
 
     <!-- TOP BAR / NAVIGATION -->
@@ -117,7 +159,13 @@
         <!-- AUTHENTICATION -->
         <section id="auth-section" class="auth">
             <div class="auth-card">
-                <div class="tabs" role="tablist">
+                <div class="auth-brand">
+                    <span class="auth-mark"></span>
+                    <span class="auth-title">Monetra</span>
+                    <span class="auth-badge" data-i18n="authTagline">Фінанси під контролем</span>
+                </div>
+
+                <div class="tabs auth-tabs" role="tablist">
                     <button type="button" role="tab" class="tab" data-auth-tab="login" aria-selected="true" data-i18n="signIn">Sign in</button>
                     <button type="button" role="tab" class="tab" data-auth-tab="register" aria-selected="false" data-i18n="createAccount">Create account</button>
                 </div>
@@ -129,11 +177,17 @@
                     <form id="login-form">
                         <label class="field">
                             <span data-i18n="loginLabel">Username or email</span>
-                            <input name="login" required autocomplete="username">
+                            <div class="input-icon-wrap">
+                                <svg class="icon input-icon"><use href="#i-user"/></svg>
+                                <input name="login" required autocomplete="username" placeholder="alex or alex@example.com">
+                            </div>
                         </label>
                         <label class="field">
                             <span data-i18n="password">Password</span>
-                            <input name="password" type="password" required autocomplete="current-password">
+                            <div class="input-icon-wrap">
+                                <svg class="icon input-icon"><use href="#i-lock"/></svg>
+                                <input name="password" type="password" required autocomplete="current-password" placeholder="••••••••••••">
+                            </div>
                         </label>
                         <button type="submit" class="btn block" data-i18n="signIn">Sign in</button>
                     </form>
@@ -146,15 +200,24 @@
                     <form id="register-form">
                         <label class="field">
                             <span data-i18n="username">Username</span>
-                            <input name="username" required minlength="3" autocomplete="username">
+                            <div class="input-icon-wrap">
+                                <svg class="icon input-icon"><use href="#i-user"/></svg>
+                                <input name="username" required minlength="3" autocomplete="username" placeholder="alex">
+                            </div>
                         </label>
                         <label class="field">
                             <span data-i18n="email">Email</span>
-                            <input name="email" type="email" required autocomplete="email">
+                            <div class="input-icon-wrap">
+                                <svg class="icon input-icon"><use href="#i-mail"/></svg>
+                                <input name="email" type="email" required autocomplete="email" placeholder="alex@example.com">
+                            </div>
                         </label>
                         <label class="field">
                             <span data-i18n="password">Password</span>
-                            <input name="password" type="password" required minlength="12" autocomplete="new-password">
+                            <div class="input-icon-wrap">
+                                <svg class="icon input-icon"><use href="#i-lock"/></svg>
+                                <input name="password" type="password" required minlength="12" autocomplete="new-password" placeholder="••••••••••••">
+                            </div>
                             <small class="hint" data-i18n="passwordHint">At least 12 characters</small>
                         </label>
                         <button type="submit" class="btn block" data-i18n="createAccount">Create account</button>
@@ -170,13 +233,16 @@
             <div id="page-overview" class="page">
 
                 <div class="page-head">
-                    <h1 data-i18n="overviewTitle">Overview</h1>
+                    <div>
+                        <h1 data-i18n="overviewTitle">Overview</h1>
+                        <p class="page-sub muted" data-i18n="overviewSubtitle">Відстежуйте та оптимізуйте свої витрати</p>
+                    </div>
                     <div class="actions">
                         <button type="button" class="btn secondary" data-open="category-dialog">
                             <svg class="icon" aria-hidden="true"><use href="#i-tag"/></svg>
-                            <span data-i18n="addCategory">Add category</span>
+                            <span data-i18n="manageCategories">Categories</span>
                         </button>
-                        <button type="button" class="btn" data-open="expense-dialog">
+                        <button type="button" class="btn primary" data-open="expense-dialog">
                             <svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg>
                             <span data-i18n="addExpense">Add expense</span>
                         </button>
@@ -184,90 +250,152 @@
                 </div>
 
                 <!-- SUMMARY -->
-                <div class="card">
-                    <div class="card-head">
-                        <h2 data-i18n="summary">Summary</h2>
-                        <select id="period" class="select-auto" data-i18n-aria="period" aria-label="Period">
-                            <option value="day" data-i18n="periodDay">Today</option>
-                            <option value="week" data-i18n="periodWeek">This week</option>
-                            <option value="month" data-i18n="periodMonth" selected>This month</option>
-                            <option value="year" data-i18n="periodYear">This year</option>
-                            <option value="custom" data-i18n="periodCustom">Custom period</option>
-                        </select>
+                <div class="summary-section">
+                    <div class="summary-header">
+                        <div class="summary-title-wrap">
+                            <h2 class="section-title" data-i18n="summary">Summary</h2>
+                            <span class="period-badge" id="current-period-text">Поточний період</span>
+                        </div>
+                        <div class="period-control">
+                            <div class="select-wrapper">
+                                <svg class="icon select-icon"><use href="#i-calendar"/></svg>
+                                <select id="period" class="select-period" data-i18n-aria="period" aria-label="Period">
+                                    <option value="day" data-i18n="periodDay">Today</option>
+                                    <option value="week" data-i18n="periodWeek">This week</option>
+                                    <option value="month" data-i18n="periodMonth" selected>This month</option>
+                                    <option value="year" data-i18n="periodYear">This year</option>
+                                    <option value="custom" data-i18n="periodCustom">Custom period</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
-                    <div id="custom-dates" class="date-range" hidden>
-                        <label class="field">
+                    <div id="custom-dates" class="date-range custom-dates-bar" hidden>
+                        <label class="field compact">
                             <span data-i18n="from">From</span>
                             <input type="date" id="start-date">
                         </label>
-                        <label class="field">
+                        <label class="field compact">
                             <span data-i18n="to">To</span>
                             <input type="date" id="end-date">
                         </label>
-                        <button type="button" id="apply-dates" class="btn secondary" data-i18n="apply">Apply</button>
+                        <button type="button" id="apply-dates" class="btn secondary sm" data-i18n="apply">Apply</button>
                     </div>
 
-                    <div class="stats">
-                        <div class="stat">
-                            <span class="label" data-i18n="totalExpenses">Total expenses</span>
-                            <p class="value" id="total-expenses">0 UAH</p>
+                    <div class="kpi-grid">
+                        <div class="kpi-card kpi-total">
+                            <div class="kpi-top">
+                                <span class="kpi-label" data-i18n="totalExpenses">Total expenses</span>
+                                <div class="kpi-icon-badge total-badge">
+                                    <svg class="icon"><use href="#i-wallet"/></svg>
+                                </div>
+                            </div>
+                            <p class="kpi-value" id="total-expenses">0 UAH</p>
+                            <span class="kpi-hint" data-i18n="totalPeriod">за обраний період</span>
                         </div>
-                        <div class="stat">
-                            <span class="label" data-i18n="transactions">Transactions</span>
-                            <p class="value" id="transaction-count">0</p>
+
+                        <div class="kpi-card kpi-transactions">
+                            <div class="kpi-top">
+                                <span class="kpi-label" data-i18n="transactions">Transactions</span>
+                                <div class="kpi-icon-badge trans-badge">
+                                    <svg class="icon"><use href="#i-receipt"/></svg>
+                                </div>
+                            </div>
+                            <p class="kpi-value" id="transaction-count">0</p>
+                            <span class="kpi-hint" data-i18n="recordsCount">зафіксованих операцій</span>
                         </div>
-                        <div class="stat">
-                            <span class="label" data-i18n="averageExpense">Average expense</span>
-                            <p class="value" id="average-expense">0 UAH</p>
+
+                        <div class="kpi-card kpi-average">
+                            <div class="kpi-top">
+                                <span class="kpi-label" data-i18n="averageExpense">Average expense</span>
+                                <div class="kpi-icon-badge avg-badge">
+                                    <svg class="icon"><use href="#i-trending"/></svg>
+                                </div>
+                            </div>
+                            <p class="kpi-value" id="average-expense">0 UAH</p>
+                            <span class="kpi-hint" data-i18n="perTransaction">на одну транзакцію</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- BREAKDOWN + CATEGORIES -->
-                <div class="grid-2">
-                    <div class="card">
-                        <div class="card-head">
-                            <h2 data-i18n="byCategory">By category</h2>
-                        </div>
-                        <div id="category-stats"></div>
-                    </div>
-
-                    <div class="card">
-                        <div class="card-head">
-                            <h2 data-i18n="categories">Categories</h2>
-                        </div>
-                        <div id="categories-list"></div>
-                    </div>
-                </div>
-
-                <!-- HISTORY -->
-                <div class="card">
+                <!-- CATEGORY BREAKDOWN WITH DONUT CHART -->
+                <div class="card breakdown-card">
                     <div class="card-head">
-                        <h2 data-i18n="history">Expenses history</h2>
+                        <div class="card-title-group">
+                            <div class="card-icon-badge">
+                                <svg class="icon"><use href="#i-pie-chart"/></svg>
+                            </div>
+                            <div>
+                                <h2 data-i18n="expensesByCategory">Expenses by category</h2>
+                                <p class="card-subtitle muted" data-i18n="categoryBreakdownSub">Структура та розподіл ваших витрат</p>
+                            </div>
+                        </div>
+                        <div class="breakdown-actions">
+                            <span class="badge live-badge" data-i18n="analyticsBadge">Аналітика</span>
+                        </div>
                     </div>
 
-                    <div class="controls">
-                        <label class="field">
-                            <span data-i18n="from">From</span>
-                            <input type="date" id="filter-start">
-                        </label>
-                        <label class="field">
-                            <span data-i18n="to">To</span>
-                            <input type="date" id="filter-end">
-                        </label>
-                        <button type="button" id="filter-expenses" class="btn" data-i18n="filter">Filter</button>
-                        <button type="button" id="clear-filter" class="btn secondary" data-i18n="clear">Clear</button>
+                    <div class="breakdown-layout">
+                        <div class="breakdown-chart-col">
+                            <div id="donut-chart-box" class="donut-box">
+                                <!-- SVG Donut generated by ui.js -->
+                            </div>
+                        </div>
+                        <div class="breakdown-list-col">
+                            <div id="category-stats" class="category-stats-list"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EXPENSES HISTORY -->
+                <div class="card history-card">
+                    <div class="card-head">
+                        <div class="card-title-group">
+                            <div class="card-icon-badge">
+                                <svg class="icon"><use href="#i-receipt"/></svg>
+                            </div>
+                            <div>
+                                <h2 data-i18n="history">Expenses history</h2>
+                                <p class="card-subtitle muted" data-i18n="historySub">Хронологія ваших фінансових операцій</p>
+                            </div>
+                        </div>
                     </div>
 
-                    <div id="expenses-list"></div>
+                    <div class="history-toolbar">
+                        <div class="toolbar-inputs">
+                            <div class="date-field-group">
+                                <span class="input-inline-label" data-i18n="from">From</span>
+                                <input type="date" id="filter-start" aria-label="Start date">
+                            </div>
+                            <div class="date-field-group">
+                                <span class="input-inline-label" data-i18n="to">To</span>
+                                <input type="date" id="filter-end" aria-label="End date">
+                            </div>
+                            <div class="select-field-group">
+                                <select id="filter-category" aria-label="Filter category">
+                                    <option value="" data-i18n="filterCategory">All categories</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="toolbar-actions">
+                            <button type="button" id="filter-expenses" class="btn sm">
+                                <svg class="icon"><use href="#i-filter"/></svg>
+                                <span data-i18n="filter">Filter</span>
+                            </button>
+                            <button type="button" id="clear-filter" class="btn secondary sm" data-i18n="clear">Clear</button>
+                        </div>
+                    </div>
+
+                    <div id="expenses-list" class="expenses-list-container"></div>
 
                     <div class="pagination">
                         <button type="button" id="prev-page" class="btn secondary sm">
                             <svg class="icon" aria-hidden="true"><use href="#i-left"/></svg>
                             <span data-i18n="previous">Previous</span>
                         </button>
-                        <span id="page-info">Page 1 / 1</span>
+                        <div class="page-badge-wrap">
+                            <span id="page-info" class="page-pill">Page 1 / 1</span>
+                        </div>
                         <button type="button" id="next-page" class="btn secondary sm">
                             <span data-i18n="next">Next</span>
                             <svg class="icon" aria-hidden="true"><use href="#i-right"/></svg>
@@ -280,70 +408,131 @@
             <div id="page-account" class="page" hidden>
 
                 <div class="page-head">
-                    <h1 data-i18n="accountTitle">Account</h1>
+                    <div>
+                        <h1 data-i18n="accountTitle">Account</h1>
+                        <p class="page-sub muted" data-i18n="accountSubtitle">Керування обліковим записом та параметрами застосунку</p>
+                    </div>
                 </div>
 
-                <div class="card">
-                    <div class="card-head">
-                        <h2 data-i18n="profile">Profile</h2>
-                    </div>
-
-                    <div class="profile-head">
-                        <div class="avatar" id="account-avatar">?</div>
-                        <div>
-                            <p class="profile-name" id="account-name">—</p>
-                            <p class="muted" id="user-info">Not logged in</p>
-                        </div>
-                    </div>
-
-                    <dl class="kv">
-                        <div>
-                            <dt data-i18n="username">Username</dt>
-                            <dd id="account-username">—</dd>
-                        </div>
-                        <div>
-                            <dt data-i18n="email">Email</dt>
-                            <dd id="account-email">—</dd>
-                        </div>
-                        <div id="since-row" hidden>
-                            <dt data-i18n="memberSince">Member since</dt>
-                            <dd id="account-since">—</dd>
-                        </div>
-                    </dl>
-                </div>
-
-                <div class="card">
-                    <div class="card-head">
-                        <h2 data-i18n="preferences">Preferences</h2>
-                    </div>
-
-                    <div class="pref">
-                        <span data-i18n="theme">Theme</span>
-                        <div class="seg" role="group">
-                            <button type="button" data-set-theme="light" aria-pressed="false" data-i18n="themeLight">Light</button>
-                            <button type="button" data-set-theme="dark" aria-pressed="false" data-i18n="themeDark">Dark</button>
-                        </div>
-                    </div>
-                    <div class="pref">
-                        <span data-i18n="language">Language</span>
-                        <div class="seg" role="group">
-                            <button type="button" data-set-lang="uk" aria-pressed="false">Українська</button>
-                            <button type="button" data-set-lang="en" aria-pressed="false">English</button>
+                <!-- HERO PROFILE CARD -->
+                <div class="card profile-hero-card">
+                    <div class="profile-hero-content">
+                        <div class="avatar-large" id="account-avatar">?</div>
+                        <div class="profile-hero-meta">
+                            <div class="profile-hero-name-row">
+                                <h2 class="profile-name" id="account-name">—</h2>
+                                <span class="badge verified-badge">
+                                    <svg class="icon badge-icon"><use href="#i-check"/></svg>
+                                    <span data-i18n="activeAccount">Active account</span>
+                                </span>
+                            </div>
+                            <p class="profile-email-sub muted" id="account-email">—</p>
+                            <p class="profile-status-muted muted" id="user-info">Not logged in</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="card">
-                    <div class="card-head">
-                        <h2 data-i18n="session">Session</h2>
+                <div class="account-grid">
+                    <!-- PERSONAL INFO CARD -->
+                    <div class="card account-subcard">
+                        <div class="card-head">
+                            <div class="card-title-group">
+                                <div class="card-icon-badge">
+                                    <svg class="icon"><use href="#i-user"/></svg>
+                                </div>
+                                <h2 data-i18n="personalInfo">Personal info</h2>
+                            </div>
+                        </div>
+
+                        <dl class="account-kv-list">
+                            <div class="account-kv-row">
+                                <dt>
+                                    <svg class="icon kv-icon"><use href="#i-user"/></svg>
+                                    <span data-i18n="username">Username</span>
+                                </dt>
+                                <dd id="account-username">—</dd>
+                            </div>
+                            <div class="account-kv-row">
+                                <dt>
+                                    <svg class="icon kv-icon"><use href="#i-mail"/></svg>
+                                    <span data-i18n="email">Email</span>
+                                </dt>
+                                <dd id="account-email-field">—</dd>
+                            </div>
+                            <div class="account-kv-row" id="since-row" hidden>
+                                <dt>
+                                    <svg class="icon kv-icon"><use href="#i-calendar"/></svg>
+                                    <span data-i18n="memberSince">Member since</span>
+                                </dt>
+                                <dd id="account-since">—</dd>
+                            </div>
+                        </dl>
                     </div>
 
-                    <div class="pref">
-                        <span class="muted" data-i18n="sessionText">You will need to sign in again to access your data.</span>
-                        <button type="button" id="logout-btn" class="btn secondary danger-outline" hidden>
-                            <svg class="icon" aria-hidden="true"><use href="#i-logout"/></svg>
-                            <span data-i18n="signOut">Sign out</span>
-                        </button>
+                    <!-- PREFERENCES CARD -->
+                    <div class="card account-subcard">
+                        <div class="card-head">
+                            <div class="card-title-group">
+                                <div class="card-icon-badge">
+                                    <svg class="icon"><use href="#i-sparkles"/></svg>
+                                </div>
+                                <h2 data-i18n="appPreferences">Appearance & Language</h2>
+                            </div>
+                        </div>
+
+                        <div class="pref-item">
+                            <div class="pref-meta">
+                                <span class="pref-title" data-i18n="theme">Theme</span>
+                                <span class="pref-desc muted" data-i18n="themeDesc">Світле або темне оформлення</span>
+                            </div>
+                            <div class="seg theme-seg" role="group">
+                                <button type="button" data-set-theme="light" aria-pressed="false" class="theme-choice-btn">
+                                    <svg class="icon"><use href="#i-sun"/></svg>
+                                    <span data-i18n="themeLight">Light</span>
+                                </button>
+                                <button type="button" data-set-theme="dark" aria-pressed="false" class="theme-choice-btn">
+                                    <svg class="icon"><use href="#i-moon"/></svg>
+                                    <span data-i18n="themeDark">Dark</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="pref-item">
+                            <div class="pref-meta">
+                                <span class="pref-title" data-i18n="language">Language</span>
+                                <span class="pref-desc muted" data-i18n="languageDesc">Мова інтерфейсу Monetra</span>
+                            </div>
+                            <div class="seg lang-seg" role="group">
+                                <button type="button" data-set-lang="uk" aria-pressed="false" class="lang-choice-btn">UA</button>
+                                <button type="button" data-set-lang="en" aria-pressed="false" class="lang-choice-btn">EN</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECURITY & SESSION CARD -->
+                    <div class="card account-subcard full-span">
+                        <div class="card-head">
+                            <div class="card-title-group">
+                                <div class="card-icon-badge">
+                                    <svg class="icon"><use href="#i-shield"/></svg>
+                                </div>
+                                <h2 data-i18n="securitySession">Security & Session</h2>
+                            </div>
+                        </div>
+
+                        <div class="session-card-body">
+                            <div class="session-info-row">
+                                <div class="session-status-dot"></div>
+                                <div>
+                                    <p class="session-status-title" data-i18n="sessionActive">Сесія активна</p>
+                                    <p class="session-status-text muted" data-i18n="sessionText">Після виходу потрібно буде увійти знову, щоб отримати доступ до своїх даних.</p>
+                                </div>
+                            </div>
+                            <button type="button" id="logout-btn" class="btn danger-outline" hidden>
+                                <svg class="icon" aria-hidden="true"><use href="#i-logout"/></svg>
+                                <span data-i18n="signOut">Sign out</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -354,8 +543,14 @@
 
     <!-- DIALOG: ADD EXPENSE -->
     <dialog id="expense-dialog" class="dialog" aria-labelledby="expense-dialog-title">
+        <div class="sheet-handle" aria-hidden="true"></div>
         <div class="dialog-head">
-            <h2 id="expense-dialog-title" data-i18n="addExpense">Add expense</h2>
+            <div class="dialog-title-group">
+                <div class="dialog-icon-badge">
+                    <svg class="icon"><use href="#i-plus"/></svg>
+                </div>
+                <h2 id="expense-dialog-title" data-i18n="addExpense">Add expense</h2>
+            </div>
             <button type="button" class="icon-btn" data-close data-i18n-aria="close" aria-label="Close">
                 <svg class="icon" aria-hidden="true"><use href="#i-x"/></svg>
             </button>
@@ -386,57 +581,83 @@
 
             <div class="form-actions">
                 <button type="button" class="btn secondary" data-close data-i18n="cancel">Cancel</button>
-                <button type="submit" class="btn" data-i18n="addExpense">Add expense</button>
+                <button type="submit" class="btn primary" data-i18n="addExpense">Add expense</button>
             </div>
         </form>
     </dialog>
 
-    <!-- DIALOG: ADD CATEGORY -->
-    <dialog id="category-dialog" class="dialog" aria-labelledby="category-dialog-title">
+    <!-- DIALOG: MANAGE CATEGORIES -->
+    <dialog id="category-dialog" class="dialog dialog-wide" aria-labelledby="category-dialog-title">
+        <div class="sheet-handle" aria-hidden="true"></div>
         <div class="dialog-head">
-            <h2 id="category-dialog-title" data-i18n="addCategory">Add category</h2>
+            <div class="dialog-title-group">
+                <div class="dialog-icon-badge">
+                    <svg class="icon"><use href="#i-tag"/></svg>
+                </div>
+                <h2 id="category-dialog-title" data-i18n="manageCategoriesTitle">Manage categories</h2>
+            </div>
             <button type="button" class="icon-btn" data-close data-i18n-aria="close" aria-label="Close">
                 <svg class="icon" aria-hidden="true"><use href="#i-x"/></svg>
             </button>
         </div>
 
-        <form id="create-category-form">
-            <label class="field">
-                <span data-i18n="name">Name</span>
-                <input id="category-name-input" name="name" maxlength="40" required autofocus data-i18n-placeholder="catPlaceholder" placeholder="e.g. Subscriptions">
-            </label>
+        <div class="category-dialog-body">
+            <!-- CREATE CATEGORY FORM -->
+            <div class="cat-create-section">
+                <h3 class="cat-section-title" data-i18n="createNewCategory">New category</h3>
+                <form id="create-category-form">
+                    <label class="field">
+                        <span data-i18n="name">Name</span>
+                        <input id="category-name-input" name="name" maxlength="40" required autofocus data-i18n-placeholder="catPlaceholder" placeholder="e.g. Subscriptions">
+                    </label>
 
-            <label class="field">
-                <span data-i18n="color">Color</span>
-                <div class="color-picker-row">
-                    <input type="color" id="category-color-input" name="color" value="#64748B" class="color-input">
-                    <span class="color-value" id="category-color-val">#64748B</span>
-                </div>
-                <div class="color-swatches" data-target="category-color-input">
-                    <button type="button" class="color-swatch" style="--c:#EF4444" data-color="#EF4444" title="Red"></button>
-                    <button type="button" class="color-swatch" style="--c:#F97316" data-color="#F97316" title="Orange"></button>
-                    <button type="button" class="color-swatch" style="--c:#F59E0B" data-color="#F59E0B" title="Amber"></button>
-                    <button type="button" class="color-swatch" style="--c:#10B981" data-color="#10B981" title="Emerald"></button>
-                    <button type="button" class="color-swatch" style="--c:#06B6D4" data-color="#06B6D4" title="Cyan"></button>
-                    <button type="button" class="color-swatch" style="--c:#3B82F6" data-color="#3B82F6" title="Blue"></button>
-                    <button type="button" class="color-swatch" style="--c:#6366F1" data-color="#6366F1" title="Indigo"></button>
-                    <button type="button" class="color-swatch" style="--c:#8B5CF6" data-color="#8B5CF6" title="Purple"></button>
-                    <button type="button" class="color-swatch" style="--c:#EC4899" data-color="#EC4899" title="Pink"></button>
-                    <button type="button" class="color-swatch active" style="--c:#64748B" data-color="#64748B" title="Slate"></button>
-                </div>
-            </label>
+                    <label class="field">
+                        <span data-i18n="color">Color</span>
+                        <div class="color-picker-row">
+                            <input type="color" id="category-color-input" name="color" value="#64748B" class="color-input">
+                            <span class="color-value" id="category-color-val">#64748B</span>
+                        </div>
+                        <div class="color-swatches" data-target="category-color-input">
+                            <button type="button" class="color-swatch" style="--c:#EF4444" data-color="#EF4444" title="Red"></button>
+                            <button type="button" class="color-swatch" style="--c:#F97316" data-color="#F97316" title="Orange"></button>
+                            <button type="button" class="color-swatch" style="--c:#F59E0B" data-color="#F59E0B" title="Amber"></button>
+                            <button type="button" class="color-swatch" style="--c:#10B981" data-color="#10B981" title="Emerald"></button>
+                            <button type="button" class="color-swatch" style="--c:#06B6D4" data-color="#06B6D4" title="Cyan"></button>
+                            <button type="button" class="color-swatch" style="--c:#3B82F6" data-color="#3B82F6" title="Blue"></button>
+                            <button type="button" class="color-swatch" style="--c:#6366F1" data-color="#6366F1" title="Indigo"></button>
+                            <button type="button" class="color-swatch" style="--c:#8B5CF6" data-color="#8B5CF6" title="Purple"></button>
+                            <button type="button" class="color-swatch" style="--c:#EC4899" data-color="#EC4899" title="Pink"></button>
+                            <button type="button" class="color-swatch active" style="--c:#64748B" data-color="#64748B" title="Slate"></button>
+                        </div>
+                    </label>
 
-            <div class="form-actions">
-                <button type="button" class="btn secondary" data-close data-i18n="cancel">Cancel</button>
-                <button type="submit" class="btn" data-i18n="createCategory">Create category</button>
+                    <div class="form-actions">
+                        <button type="submit" class="btn primary block" data-i18n="createCategory">Create category</button>
+                    </div>
+                </form>
             </div>
-        </form>
+
+            <!-- YOUR CATEGORIES LIST -->
+            <div class="cat-list-section">
+                <div class="cat-list-header">
+                    <h3 class="cat-section-title" data-i18n="yourCategories">Your categories</h3>
+                    <span id="cat-count-badge" class="badge">0</span>
+                </div>
+                <div id="categories-list" class="dialog-categories-list"></div>
+            </div>
+        </div>
     </dialog>
 
     <!-- DIALOG: EDIT CATEGORY -->
     <dialog id="edit-category-dialog" class="dialog" aria-labelledby="edit-category-dialog-title">
+        <div class="sheet-handle" aria-hidden="true"></div>
         <div class="dialog-head">
-            <h2 id="edit-category-dialog-title" data-i18n="editCategory">Edit category</h2>
+            <div class="dialog-title-group">
+                <div class="dialog-icon-badge">
+                    <svg class="icon"><use href="#i-edit"/></svg>
+                </div>
+                <h2 id="edit-category-dialog-title" data-i18n="editCategory">Edit category</h2>
+            </div>
             <button type="button" class="icon-btn" data-close data-i18n-aria="close" aria-label="Close">
                 <svg class="icon" aria-hidden="true"><use href="#i-x"/></svg>
             </button>
@@ -472,7 +693,7 @@
 
             <div class="form-actions">
                 <button type="button" class="btn secondary" data-close data-i18n="cancel">Cancel</button>
-                <button type="submit" class="btn" data-i18n="saveCategory">Save changes</button>
+                <button type="submit" class="btn primary" data-i18n="saveCategory">Save changes</button>
             </div>
         </form>
     </dialog>
